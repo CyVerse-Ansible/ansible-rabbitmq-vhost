@@ -1,5 +1,6 @@
 Role Name
 =========
+[![Build Status](https://travis-ci.org/CyVerse-Ansible/ansible-rabbitmq-vhost.svg?branch=master)](https://travis-ci.org/CyVerse-Ansible/ansible-rabbitmq-vhost)
 
 This is a role for configuring a vhost on a RabbitMQ broker.
 
