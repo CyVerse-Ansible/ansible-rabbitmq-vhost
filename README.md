@@ -103,7 +103,7 @@ Field         | Required | Default | Choices         | Comment
 Dependencies
 ------------
 
-None
+* requests >= 1.0.0
 
 Example Playbook
 ----------------
