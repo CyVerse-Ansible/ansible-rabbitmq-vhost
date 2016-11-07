@@ -3,17 +3,19 @@ language: python
 python: "2.7"
 
 # Use the new container infrastructure
-sudo: false
+sudo: true
 
 # Install ansible
 addons:
   apt:
     packages:
     - python-pip
+    - python-requests
+    - rabbitmq-server
 
 install:
   # Install ansible
-  - pip install ansible
+  - pip install ansible requests
 
   # Check ansible version
   - ansible --version
