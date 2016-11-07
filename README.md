@@ -1,31 +1,149 @@
 Role Name
 =========
 
-A brief description of the role goes here.
+This is a role for configuring a vhost on a RabbitMQ broker.
 
 Requirements
 ------------
 
-Any pre-requisites that may not be covered by Ansible itself or the role should be mentioned here. For instance, if the role uses the EC2 module, it may be a good idea to mention in this section that the boto package is required.
+It is assumed that a RabbitMQ server is already installed with the management plugin. The RabbitMQ server should be at least version 3.2.
 
 Role Variables
 --------------
 
-A description of the settable variables for this role should go here, including any variables that are in defaults/main.yml, vars/main.yml, and any variables that can/should be set via parameters to the role. Any variables that are read from other roles and/or the global scope (ie. hostvars, group vars, etc.) should be mentioned here as well.
+Variable                    | Required | Default   | Choices         | Comments
+--------------------------- | -------- | --------- | --------------- | --------
+`rabbitmq_admin_password`   | no       |           |                 | the password used to authenticate `rabbitmq_admin_user`
+`rabbitmq_admin_user`       | no       | guest     |                 | a user able to administer the vhost (doesn't need to exist as long as it is also provided in the `rabbitmq_vhost_users` list)
+`rabbitmq_host`             | no       | localhost |                 | the host of RabbitMQ broker owning the vhost
+`rabbitmq_mgmt_port`        | no       | 15672     |                 | the port used on `rabbitmq_host` to connect to the management plugin
+`rabbimtq_node`             | no       | rabbit    |                 | the erlang node of the rabbitmq server being configured
+`rabbitmq_vhost_exchanges`  | no       | []        |                 | the exchanges to add, modify, or remove from the vhost
+`rabbitmq_vhost_name`       | yes      |           |                 | the name of the vhost to manage
+`rabbitmq_vhost_parameters` | no       | []        |                 | the parameters to add, modify, or remove from the vhost
+`rabbitmq_vhost_policies`   | no       | []        |                 | the policies to add or remove from the vhost
+`rabbitmq_vhost_queues`     | no       | []        |                 | the queues to add, modify, or remove from the vhost
+`rabbitmq_vhost_state`      | no       | present   | absent, present | whether or not the vhost should be present on the server being configured
+`rabbitmq_vhost_tracing`    | no       | false     |                 | whether or not tracing should be enabled for this vhost
+`rabbitmq_vhost_users`      | no       | []        |                 | the users to add, modify, or remove from the vhost
+
+
+`irods_vhost_parameters` item 
+
+Field       | Required | Default | Choices         | Comments
+----------- | -------- | ------- | --------------- | --------
+`component` | yes      |         |                 | component where the parameter is to be set
+`name`      | yes      |         |                 | name of parameter
+`state`     | no       | present | absent, present | whether or not this parameter should be present on the component
+`value`     | no       |         |                 | the value of the parameter as JSON
+
+`irods_vhost_policies` item
+
+Field      | Required | Default | Choices                | Comment
+---------- | -------- | ------- | ---------------------- | -------
+`apply_to` | no       | all     | all, exchanges, queues | what the policy applies to
+`name`     | yes      |         |                        | the name of the policy
+`pattern`  | yes      |         |                        | a regular expression used to match the names of what this policy applies to
+`priority` | no       |         |                        | the priority of the policy
+`state`    | no       | present | absent, present        | whether or not this policy should be present
+`tags`     | yes      |         |                        | a dictionary describing the policy
+
+`irods_vhost_users` item
+
+Field            | Required | Default | Choices         | Comment
+---------------- | -------- | ------- | --------------- | -------
+`configure_priv` | no       | ^$      |                 | regular expression used to restrict the user's configure ability
+`force`          | no       | false   |                 | whether or not to delete and recreate the user
+`name`           | yes      |         |                 | the name of the user
+`password`       | no       |         |                 | the password used to authenticate the user
+`read_priv`      | no       | ^$      |                 | regular expression used to restrict the user's read ability
+`state`          | no       | present | absent, present | whether or not this user should be present
+`tags`           | no       |         |                 | a list of tags to apply to this user
+`write_priv`     | no       | ^$      |                 | regular expression used to restrict the user's write ability
+
+
+`irods_vhost_exchanges` item
+
+Field         | Required | Default | Choices                        | Comment
+------------- | -------- | ------- | ------------------------------ | -------
+`arguments`   | no       |         |                                | a dictionary of extra arguments for the exchange
+`auto_delete` | no       |         |                                | a boolean indicating if this exchange is to delete itself once nothing is bound to it
+`bindings`    | no       | []      |                                | a list of binding descriptions for the exchanges this exchange is bound to (don't need to exist as long as they are defined in `irods_vhost_exchanges`)
+`durable`     | no       | true    |                                | whether or not this exchange is durable
+`internal`    | no       |         |                                | a boolean indicating if this exchange is only available for other exchanges
+`name`        | yes      |         |                                | the name of the exchange
+`state`       | no       | present | absent, present                | whether or not this exchange should be present
+`type`        | no       | direct  | direct, fanout, headers, topic | the type of exchange
+
+`irods_vhost_queues` item
+
+Field                     | Required | Default  | Choices         | Comment
+------------------------- | -------- | -------- | --------------- | -------
+`arguments`               | no       |          |                 | a dictionary of extra arguments for the queue
+`auto_delete`             | no       |          |                 | a boolean indicating if this queue should delete itself when nothing is connected to it
+`auto_expires`            | no       | forever  |                 | how long (in milliseconds) this queue can be unused before it deletes itself
+`bindings`                | no       | []       |                 | a list of binding descriptions for the exchanges this queue is bound to (don't need to exist as long as they are defined in `irods_vhost_exchanges`)
+`dead_letter_exchange`    | no       | null     |                 | the name of an exchange where messages will be republished if they expire or are rejected (doesn't need to exist as long as it is defined in `irods_vhost_exchanges`)
+`dead_letter_routing_key` | no       | null     |                 | the replacement routing key to use when a message is republished to the `dead_letter_exchange` exchange
+`durable`                 | no       | true     |                 | whether or not the queue is durable
+`max_length`              | no       | no limit |                 | how many messages this queue can contain before it start rejecting them
+`message_ttl`             | no       | forever  |                 | how long (in milliseconds) a message can live in this queue before it is discarded
+`name`                    | yes      |          |                 | the name of the queue
+`state`                   | no       | present  | absent, present | whether or not this queue should be present
+
+`bindings` item
+
+Field         | Required | Default | Choices         | Comment
+------------- | -------- | ------- | --------------- | -------
+`arguments`   | no       |         |                 | a dictionary of extra arguments for the binding description
+`routing_key` | no       | #       |                 | the routing key
+`source`      | yes      |         |                 | the source for the binding
+`state`       | no       | present | absent, present | whether or not this binding should be present
 
 Dependencies
 ------------
 
-A list of other roles hosted on Galaxy should go here, plus any details in regards to parameters that may need to be set for other roles, or variables that are used from other roles.
+None
 
 Example Playbook
 ----------------
 
-Including an example of how to use your role (for instance, with variables passed in as parameters) is always nice for users too:
+Here's an example playbook that configures a vhost `/prod/data-store` with three users, an exchange, and two queues. The two queues are bound to the exchange.
 
-    - hosts: servers
-      roles:
-         - { role: username.rolename, x: 42 }
+```yaml
+- hosts: amqp_brokers
+  roles:
+    - role: cyverse.rabbitmq_vhost
+      rabbitmq_admin_user: admin
+      rabbitmq_vhost_name: /prod/data-store
+      rabbitmq_vhost_users:
+        - name: admin
+          configure_priv: .*
+          write_priv: .*
+          read_priv: .*
+          tags:
+            - administrator
+        - name: irods
+          write_priv: .*
+        - name: de
+          read_priv: .*
+        - name: guest
+          state: absent
+      rabbitmq_vhost_exchanges:
+        - name: irods
+          type: topic
+      rabbitmq_vhost_queues:
+        - name: indexing
+          bindings:
+            - source: irods
+              routing_key: 'collection.#'
+            - source: irods
+              routing_key: 'data-object.#'
+        - name: type-detection
+          bindings:
+            - source: irods
+              routing_key: data-object.add
+```
 
 License
 -------
@@ -35,4 +153,4 @@ BSD
 Author Information
 ------------------
 
-An optional section for the role authors to include contact information, or a website (HTML is not allowed).
+Tony Edgin
