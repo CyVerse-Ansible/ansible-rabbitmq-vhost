@@ -1,2 +1,13 @@
 ---
-# defaults file for rabbitmq-vhost
+rabbitmq_host: "{{ host_default }}"
+rabbitmq_mgmt_port: "{{ mgmt_port_default }}"
+rabbitmq_node: "{{ node_default }}"
+rabbitmq_admin_user: "{{ admin_user_default }}"
+
+rabbitmq_vhost_state: "{{ vhost_state_default }}"
+rabbitmq_vhost_tracing: "{{ vhost_tracing_default }}"
+rabbitmq_vhost_users: "{{ vhost_users_default }}"
+rabbitmq_vhost_exchanges: "{{ vhost_exchanges_default }}"
+rabbitmq_vhost_queues: "{{ vhost_queues_default }}"
+rabbitmq_vhost_policies: "{{ vhost_policies_default }}"
+rabbitmq_vhost_parameters: "{{ vhost_parameters_default }}"

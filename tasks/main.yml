@@ -1,2 +1,100 @@
 ---
-# tasks file for rabbitmq-vhost
+- name: Create or remove vhost
+  rabbitmq_vhost:
+    node: "{{ rabbitmq_node }}"
+    name: "{{ rabbitmq_vhost_name }}"
+    state: "{{ rabbitmq_vhost_state }}"
+    tracing: "{{ rabbitmq_vhost_tracing }}"
+
+- when: rabbitmq_vhost_state == "present"
+  block:
+    - name: configure parameters
+      with_items: "{{ rabbitmq_vhost_parameters }}"
+      rabbitmq_parameter:
+        node: "{{ rabbitmq_node }}"
+        vhost: "{{ rabbitmq_vhost_name }}"
+        component: "{{ item.component }}"
+        name: "{{ item.name }}"
+        state: "{{ item.state | default(parameter_default.state) }}"
+        value: "{{ item.value | default(omit) }}"
+
+    - name: configure policies
+      with_items: "{{ rabbitmq_vhost_policies }}"
+      rabbitmq_policy:
+        node: "{{ rabbitmq_node }}"
+        vhost: "{{ rabbitmq_vhost_name }}"
+        name: "{{ item.name }}"
+        pattern: "{{ item.pattern }}"
+        tags: "{{ item.tags }}"
+        state: "{{ item.state | default(policy_default.state) }}"
+        apply_to: "{{ item.apply_to | default(policy_default.apply_to) }}"
+        priority: "{{ item.priority | default(omit) }}"
+
+    - name: configure users
+      with_items: "{{ rabbitmq_vhost_users }}"
+      rabbitmq_user:
+        node: "{{ rabbitmq_node }}"
+        vhost: "{{ rabbitmq_vhost_name }}"
+        user: "{{ item.name }}"
+        state: "{{ item.state | default(user_default.state) }}"
+        force: "{{ item.force | default(user_default.force) }}"
+        password: "{{ item.password | default(omit) }}"
+        tags: "{{ item.tags | default(omit) }}"
+        configure_priv: "{{ item.configure_priv | default(user_default.configure_priv) }}"
+        read_priv: "{{ item.read_priv | default(user_default.read_priv) }}"
+        write_priv: "{{ item.write_priv | default(user_default.write_priv) }}"
+
+    - name: configure exchanges
+      with_items: "{{ rabbitmq_vhost_exchanges }}"
+      rabbitmq_exchange:
+        login_host: "{{ rabbitmq_host }}"
+        login_port: "{{ rabbitmq_mgmt_port }}"        
+        login_user: "{{ rabbitmq_admin_user }}"
+        login_password: "{{ rabbitmq_admin_password | default(omit) }}"
+        vhost: "{{ rabbitmq_vhost_name }}"
+        name: "{{ item.name }}"
+        state: "{{ item.state | default(exchange_default.state) }}"
+        auto_delete: "{{ item.auto_delete | default(omit) }}"
+        durable: "{{ item.durable | default(exchange_default.durable) }}"
+        exchange_type: "{{ item.type | default(exchange_default_type) }}"
+        internal: "{{ item.internal | default(omit) }}"
+        arguments: "{{ item.arguments | default(omit) }}"
+
+    - name: bind exchanges
+      with_items: "{{ rabbitmq_vhost_exchanges }}"
+      when: item.state == "present"
+      include: bind.yml
+      vars:
+        destination: "{{ item.name }}"
+        destination_type: exchange
+        bindings: "{{ item.bindings }}"   
+
+    - name: configure queues
+      with_items: "{{ rabbitmq_vhost_queues }}"
+      rabbitmq_queue: 
+        login_host: "{{ rabbitmq_host }}"
+        login_port: "{{ rabbitmq_mgmt_port }}"        
+        login_user: "{{ rabbitmq_admin_user }}"
+        login_password: "{{ rabbitmq_admin_password | default(omit) }}"
+        vhost: "{{ rabbitmq_vhost_name }}"
+        name: "{{ item.name }}"
+        state: "{{ item.state | default(queue_default.state) }}"
+        auto_delete: "{{ item.auto_delete | default(omit) }}"
+        auto_expires: "{{ item.auto_expires | default(queue_default.auto_expires) }}"
+        dead_letter_exchange: "{{ item.dead_letter_exchange 
+                                | default(queue_default.dead_letter_exchange) }}"
+        dead_letter_routing_key: "{{ item.dead_letter_routing_key 
+                                   | default(queue_default.dead_letter_routing_key) }}"
+        durable: "{{ item.durable | default(queue_default.durable) }}"
+        max_length: "{{ item.max_length | default(queue_default.max_length) }}"
+        message_ttl: "{{ item.message_ttl | default(queue_default.message_ttl) }}"
+        arguments: "{{ item.arguments | default(omit) }}"
+
+    - name: bind queues
+      with_items: "{{ rabbitmq_vhost_queues }}"
+      when: item.state == "present"
+      include: bind.yml
+      vars:
+        destination: "{{ item.name }}"
+        destination_type: queue
+        bindings: "{{ item.bindings }}"

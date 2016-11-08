@@ -1,0 +1,16 @@
+---
+- name: bind {{ destination_type }} {{ destination }}
+  with_items: "{{ bindings }}"
+  rabbitmq_binding:
+    login_host: "{{ rabbitmq_host }}"
+    login_port: "{{ rabbitmq_mgmt_port }}"
+    login_user: "{{ rabbitmq_admin_user }}"
+    login_password: "{{ rabbitmq_admin_password | default(omit) }}"
+    vhost: "{{ rabbitmq_vhost_name }}"
+    destination: "{{ destination }}"
+    destination_type: "{{ destination_type }}"
+    name: "{{ item.source }}"
+    state: "{{ item.state | default(binding_default.state) }}"
+    routing_key: "{{ item.routing_key | default(binding_default.routing_key) }}"
+    arguments: "{{ item.arguments | default(omit) }}"
+
