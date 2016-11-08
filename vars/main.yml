@@ -1,7 +1,7 @@
 ---
 host_default: localhost
 mgmt_port_default: 15672
-node_default: rabbit
+node_default: rabbit@localhost
 admin_user_default: guest
 
 vhost_state_default: present
