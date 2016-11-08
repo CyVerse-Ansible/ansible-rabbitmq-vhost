@@ -2,4 +2,5 @@
 - hosts: localhost
   remote_user: root
   roles:
-    - ansible-rabbitmq-vhost
+    - role: ansible-rabbitmq-vhost
+      rabbitmq_vhost_name: /vhost
