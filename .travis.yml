@@ -4,35 +4,33 @@ python: "2.7"
 
 # Use the new container infrastructure
 sudo: true
+services:
+  - docker
 
-# Install ansible
-addons:
-  apt:
-    packages:
-    - python-pip
-    - python-requests
-    - rabbitmq-server
+env:
+  - distribution: centos
+    version: 6
 
-install:
-  # Set the RabbitMQ node name
-  - sudo printf 'NODENAME=rabbit@%s\n' $HOSTNAME >/etc/rabbitmq/rabbitmq-env.conf
-
-  # Start the RabbitMQ broker
-  - sudo service rabbitmq-server start
-
-  # Install ansible
-  - pip install ansible requests
-
-  # Check ansible version
-  - ansible --version
-
-  # Create ansible.cfg with correct roles_path
-  - printf '[defaults]\nroles_path=../' >ansible.cfg
+before_install:
+  # Start the container
+  - 'sudo docker run -it --name=test_dummy --privileged --detach --volume="${PWD}":/etc/ansible/roles/CyVerse-Ansible.rabbitmq-vhost:rw cyverse/ansible-test:latest-${distribution}-${version} bash'
+  
+  # Install required software
+  - "sudo docker exec test_dummy /etc/ansible/roles/CyVerse-Ansible.rabbitmq-vhost/tests/bootstrap.sh"
 
 script:
-  - ansible-playbook tests/test.yml -i tests/inventory 
+  # Run playbook to create vhost
+  - "sudo docker exec test_dummy ansible-playbook /etc/ansible/roles/CyVerse-Ansible.rabbitmq-vhost/tests/test.yml -i /etc/ansible/roles/CyVerse-Ansible.rabbitmq-vhost/tests/inventory --connection=local"
 
-  - tests/verify.sh
+  # Verify vhost created
+  - "sudo docker exec test_dummy /etc/ansible/roles/CyVerse-Ansible.rabbitmq-vhost/tests/verify.sh"
+
+  # Idempotence test
+  - >
+    sudo docker exec test_dummy ansible-playbook /etc/ansible/roles/CyVerse-Ansible.rabbitmq-vhost/tests/test.yml -i /etc/ansible/roles/CyVerse-Ansible.rabbitmq-vhost/tests/inventory --connection=local
+    | grep -q 'changed=0.*failed=0'
+    && (echo 'Idempotence test: pass' && exit 0)
+    || (echo 'Idempotence test: fail' && exit 1)
 
 notifications:
   webhooks: https://galaxy.ansible.com/api/v1/notifications/

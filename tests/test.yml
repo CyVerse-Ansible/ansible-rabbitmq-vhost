@@ -2,5 +2,5 @@
 - hosts: localhost
   become: true
   roles:
-    - role: ansible-rabbitmq-vhost
+    - role: CyVerse-Ansible.rabbitmq-vhost
       rabbitmq_vhost_name: /vhost
