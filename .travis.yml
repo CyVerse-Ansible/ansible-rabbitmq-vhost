@@ -15,7 +15,7 @@ env:
 
 before_install:
   # Start the container
-  - 'sudo docker run --detach --interactive --privileged --tty --name=test_dummy --volume="$PWD":"$ROLE_DIR":rw cyverse/ansible-test:latest-"$distribution"-"$version" bash'
+  - 'sudo docker run --detach --interactive --tty --name=test_dummy --volume="$PWD":"$ROLE_DIR":rw cyverse/ansible-test:latest-"$distribution"-"$version" bash'
   
   # Install required software
   - 'sudo docker exec test_dummy "$TEST_DIR"/bootstrap.sh'
