@@ -14,6 +14,10 @@ addons:
     - rabbitmq-server
 
 install:
+  # Set the RabbitMQ node name
+  - sudo printf 'NODENAME=rabbit@%s\n' $HOSTNAME >/etc/rabbitmq/rabbitmq-env.conf
+
+  # Start the RabbitMQ broker
   - sudo service rabbitmq-server start
 
   # Install ansible
@@ -24,8 +28,6 @@ install:
 
   # Create ansible.cfg with correct roles_path
   - printf '[defaults]\nroles_path=../' >ansible.cfg
-
-  - sudo rabbitmqctl status
 
 script:
   - ansible-playbook tests/test.yml -i tests/inventory 
