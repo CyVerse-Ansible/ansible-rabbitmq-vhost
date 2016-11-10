@@ -6,3 +6,8 @@
       rabbitmq_vhost_name: /vhost
       rabbitmq_vhost_users: 
         - name: admin
+          configure_priv: .*
+          read_priv: .*
+          write_priv: .*
+          tags:
+            - administrator
