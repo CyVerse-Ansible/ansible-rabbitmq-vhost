@@ -1,4 +1,14 @@
 ---
+# EXPECTED VARS:
+#
+# bindings:
+#   - arguments:    optional
+#   - routing_key:  optional
+#   - source:       required
+#   - state:        optional 
+# destination:      required
+# destination_type: required
+
 - name: bind {{ destination_type }} {{ destination }}
   with_items: "{{ bindings }}"
   rabbitmq_binding:
