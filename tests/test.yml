@@ -1,5 +1,6 @@
 ---
-- hosts: localhost
+- name: test rabbitmq-vhost role
+  hosts: localhost
   become: true
   roles:
     - role: CyVerse-Ansible.rabbitmq-vhost
@@ -11,3 +12,19 @@
           write_priv: .*
           tags:
             - administrator
+
+- name: verify configuration
+  tags:
+    - test
+  hosts: localhost
+  become: true
+  gather_facts: false
+  tasks:
+    - name: Perform tests
+      shell: "{{ item }}"
+      with_items:
+        - rabbitmqctl list_vhosts | grep --quiet --regexp \'^/vhost$\'
+        - rabbitmqctl list_users | grep --quiet --regexp '^admin[[:space:]]*\[administrator\]$'
+        - |
+          rabbitmqctl list_permissions -p /vhost \
+            | grep --quiet --regexp '^admin[[:space:]]*\.\*[[:space:]]*\.\*[[:space:]]*\.\*$'

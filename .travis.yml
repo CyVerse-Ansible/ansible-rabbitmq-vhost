@@ -25,10 +25,7 @@ script:
   - 'sudo docker exec test_dummy ansible-playbook --syntax-check --inventory-file="$TEST_DIR"/inventory "$TEST_DIR"/test.yml'
  
   # Run playbook to create vhost
-  - 'sudo docker exec test_dummy ansible-playbook --connection=local --inventory-file="$TEST_DIR"/inventory "$TEST_DIR"/test.yml'
-
-  # Verify vhost created
-  - 'sudo docker exec test_dummy "$TEST_DIR"/verify.sh'
+  - 'sudo docker exec test_dummy ansible-playbook --connection=local --inventory-file="$TEST_DIR"/inventory --skip-tags=test "$TEST_DIR"/test.yml'
 
   # Idempotence test
   - >
