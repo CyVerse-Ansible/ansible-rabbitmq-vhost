@@ -54,12 +54,8 @@ Field      | Required | Default | Choices                | Comment
 Field            | Required | Default | Choices         | Comment
 ---------------- | -------- | ------- | --------------- | -------
 `configure_priv` | no       | ^$      |                 | regular expression used to restrict the user's configure ability
-`force`          | no       | false   |                 | whether or not to delete and recreate the user
 `name`           | yes      |         |                 | the name of the user
-`password`       | no       |         |                 | the password used to authenticate the user
 `read_priv`      | no       | ^$      |                 | regular expression used to restrict the user's read ability
-`state`          | no       | present | absent, present | whether or not this user should be present
-`tags`           | no       |         |                 | a list of tags to apply to this user
 `write_priv`     | no       | ^$      |                 | regular expression used to restrict the user's write ability
 
 

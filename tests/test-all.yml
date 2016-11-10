@@ -2,17 +2,15 @@
 - name: test rabbitmq-vhost role
   hosts: localhost
   become: true
+
   roles:
     - role: CyVerse-Ansible.rabbitmq-vhost
       rabbitmq_vhost_name: /vhost
       rabbitmq_vhost_users: 
         - name: admin
-          password: password
           configure_priv: .*
           read_priv: .*
           write_priv: .*
-          tags:
-            - administrator
 
   post_tasks:
     - tags:
@@ -27,14 +25,6 @@
           with_items:
             - name: Verify that vhost /vhost created
               cmd: rabbitmqctl list_vhosts | grep --quiet --regexp '^/vhost$'
-
-            - name: Verify user admin created
-              cmd: |
-                rabbitmqctl list_users \
-                  | grep --quiet --regexp '^admin[[:space:]]*\[administrator\]$'
-
-            - name: Verify user admin password
-              cmd: curl --fail --user admin:password localhost:15672/api/overview
 
             - name: Verify user admin has correct permissions
               cmd: |

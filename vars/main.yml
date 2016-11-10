@@ -20,8 +20,6 @@ policy_default:
   apply_to: all
 
 user_default:
-  state: present
-  force: false
   configure_priv: ^$
   read_priv: ^$
   write_priv: ^$

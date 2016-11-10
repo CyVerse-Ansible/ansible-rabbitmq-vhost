@@ -1,3 +1,19 @@
 ---
+- name: setup for tests
+  tags:
+    - test
+  hosts: localhost
+  become: true
+  tasks:
+    - name: create user user
+      rabbitmq_user:
+        name: user
+        force: true
+
+    - name: create user admin
+      rabbitmq_user:
+        user: admin
+        force: true
+        
 - include: test-minimal-user.yml
 - include: test-all.yml

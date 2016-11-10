@@ -32,17 +32,9 @@
 
     - name: configure users
       with_items: "{{ rabbitmq_vhost_users }}"
-      rabbitmq_user:
-        node: "{{ rabbitmq_node }}"
-        vhost: "{{ rabbitmq_vhost_name }}"
-        user: "{{ item.name }}"
-        state: "{{ item.state | default(user_default.state) }}"
-        force: "{{ item.force | default(user_default.force) }}"
-        password: "{{ item.password | default(omit) }}"
-        tags: "{{ (item.tags | join(',') if item.tags is defined) | default(omit) }}"
-        configure_priv: "{{ item.configure_priv | default(user_default.configure_priv) }}"
-        read_priv: "{{ item.read_priv | default(user_default.read_priv) }}"
-        write_priv: "{{ item.write_priv | default(user_default.write_priv) }}"
+      include: user.yml
+      vars:
+        user: "{{ item }}"
 
     - name: configure exchanges
       with_items: "{{ rabbitmq_vhost_exchanges }}"
