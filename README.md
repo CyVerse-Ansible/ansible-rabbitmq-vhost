@@ -15,7 +15,7 @@ Role Variables
 Variable                    | Required | Default   | Choices         | Comments
 --------------------------- | -------- | --------- | --------------- | --------
 `rabbitmq_admin_password`   | no       |           |                 | the password used to authenticate `rabbitmq_admin_user`
-`rabbitmq_admin_user`       | no       | guest     |                 | a user able to administer the vhost (doesn't need to exist as long as it is also provided in the `rabbitmq_vhost_users` list)
+`rabbitmq_admin_user`       | no       | guest     |                 | a user able to administer the vhost (doesn't need to have permission on it as long as it is also provided in the `rabbitmq_vhost_users` list)
 `rabbitmq_host`             | no       | localhost |                 | the host of RabbitMQ broker owning the vhost
 `rabbitmq_mgmt_port`        | no       | 15672     |                 | the port used on `rabbitmq_host` to connect to the management plugin
 `rabbimtq_node`             | no       | rabbit    |                 | the erlang node of the rabbitmq server being configured
@@ -118,14 +118,10 @@ Here's an example playbook that configures a vhost `/prod/data-store` with three
           configure_priv: .*
           write_priv: .*
           read_priv: .*
-          tags:
-            - administrator
         - name: irods
           write_priv: .*
         - name: de
           read_priv: .*
-        - name: guest
-          state: absent
       rabbitmq_vhost_exchanges:
         - name: irods
           type: topic
