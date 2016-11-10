@@ -1,0 +1,33 @@
+---
+- name: create minimal user creation
+  hosts: localhost
+  become: true
+  roles:
+    - role: CyVerse-Ansible.rabbitmq-vhost
+      rabbitmq_vhost_name: /
+      rabbitmq_vhost_users:
+        - name: user
+
+  post_tasks:
+    - tags:
+        - test
+      block:
+        - set_fact:
+            any_failed: false
+
+        - include: tasks/test.yml
+          vars:
+            test: "{{ item }}"
+          with_items:
+            - name: Verify user user created
+              cmd: |
+                rabbitmqctl list_users | grep --quiet --regexp '^user[[:space:]]*\[\]$'
+
+            - name: Verify user user has correct permissions
+              cmd: |
+                rabbitmqctl list_permissions -p / \
+                  | grep --quiet --regexp '^user[[:space:]]*\^\$[[:space:]]*\^\$[[:space:]]*\^\$$'
+
+        - when: any_failed
+          fail:
+            msg: some of the tests failed 
