@@ -22,14 +22,14 @@ before_install:
 
 script:
   # Syntax check
-  - 'sudo docker exec test_dummy ansible-playbook --syntax-check --inventory-file="$TEST_DIR"/inventory "$TEST_DIR"/test.yml'
+  - 'sudo docker exec test_dummy ansible-playbook --syntax-check --inventory-file="$TEST_DIR"/inventory "$TEST_DIR"/main.yml'
  
   # Run playbook to create vhost
-  - 'sudo docker exec test_dummy ansible-playbook --connection=local --inventory-file="$TEST_DIR"/inventory --skip-tags=test "$TEST_DIR"/test.yml'
+  - 'sudo docker exec test_dummy ansible-playbook --connection=local --inventory-file="$TEST_DIR"/inventory --skip-tags=test "$TEST_DIR"/main.yml'
 
   # Idempotence test
   - >
-    sudo docker exec test_dummy ansible-playbook --connection=local --inventory-file="$TEST_DIR"/inventory "$TEST_DIR"/test.yml 
+    sudo docker exec test_dummy ansible-playbook --connection=local --inventory-file="$TEST_DIR"/inventory "$TEST_DIR"/main.yml 
     | grep --quiet --regexp='changed=0.*failed=0' 
     && (echo 'Idempotence test: pass' && exit 0) || (echo 'Idempotence test: fail' && exit 1)
 

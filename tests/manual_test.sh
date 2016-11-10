@@ -26,7 +26,7 @@ if [ "$err" -eq 0 ]
 then
   printf '\n--> Checking syntax\n'
   docker exec test_dummy \
-    ansible-playbook --syntax-check --inventory-file="$TEST_DIR"/inventory "$TEST_DIR"/test.yml
+    ansible-playbook --syntax-check --inventory-file="$TEST_DIR"/inventory "$TEST_DIR"/main.yml
   err="$?"
 fi
 
@@ -35,7 +35,7 @@ if [ "$err" -eq 0 ]
 then
   printf '\n--> Running configuration playbook\n'
   docker exec test_dummy \
-    ansible-playbook --connection=local --inventory-file="$TEST_DIR"/inventory "$TEST_DIR"/test.yml
+    ansible-playbook --connection=local --inventory-file="$TEST_DIR"/inventory "$TEST_DIR"/main.yml
   err="$?"
 fi
 
@@ -45,7 +45,7 @@ then
   printf '\n--> Checking idempotence of role\n'
   docker exec test_dummy \
       ansible-playbook --connection=local --inventory-file="$TEST_DIR"/inventory --skip-tags=test \
-                       "$TEST_DIR"/test.yml \
+                       "$TEST_DIR"/main.yml \
     | grep --quiet --regexp='changed=0.*failed=0' \
       && printf 'Idempotence test: pass\n' \
       || printf 'Idempotence test: fail\n'
