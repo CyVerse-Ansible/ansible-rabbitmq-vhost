@@ -13,14 +13,6 @@ docker run --detach --interactive --tty --name=test_dummy --volume="$PWD"/..:"$R
   > /dev/null
 err="$?"
 
-# Install required software
-if [ "$err" -eq 0 ]
-then
-  printf '\n--> Installing required software\n'
-  docker exec test_dummy "$TEST_DIR"/bootstrap.sh > /dev/null
-  err="$?"
-fi
-
 # Check syntax of role
 if [ "$err" -eq 0 ]
 then

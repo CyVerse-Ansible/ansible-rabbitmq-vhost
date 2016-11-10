@@ -17,9 +17,6 @@ before_install:
   # Start the container
   - 'sudo docker run --detach --interactive --tty --name=test_dummy --volume="$PWD":"$ROLE_DIR":rw cyverse/ansible-test:latest-"$distribution"-"$version" bash'
   
-  # Install required software
-  - 'sudo docker exec test_dummy "$TEST_DIR"/bootstrap.sh'
-
 script:
   # Syntax check
   - 'sudo docker exec test_dummy ansible-playbook --syntax-check --inventory-file="$TEST_DIR"/inventory "$TEST_DIR"/main.yml'

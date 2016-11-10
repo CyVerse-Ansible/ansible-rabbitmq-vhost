@@ -5,6 +5,29 @@
   hosts: localhost
   become: true
   tasks:
+    - name: install python-requests
+      package:
+        name: python-requests
+        state: present
+
+    - name: install erlang
+      package:
+        name: erlang
+        state: present
+
+    - name: install rabbitmq broker
+      yum:
+        name: https://www.rabbitmq.com/releases/rabbitmq-server/v3.3.1/rabbitmq-server-3.3.1-1.noarch.rpm 
+
+    - name: enable management plugin
+      rabbitmq_plugin:
+        names: rabbitmq_management
+                
+    - name: start rabbitmq broker
+      service:
+        name: rabbitmq-server
+        state: restarted
+
     - name: create user user
       rabbitmq_user:
         name: user
