@@ -14,18 +14,18 @@ Role Variables
 
 Variable                    | Required | Default   | Choices         | Comments
 --------------------------- | -------- | --------- | --------------- | --------
-`rabbitmq_admin_password`   | no       |           |                 | the password used to authenticate `rabbitmq_admin_user`
-`rabbitmq_admin_user`       | no       | guest     |                 | a user able to administer the vhost (doesn't need to have permission on it as long as it is also provided in the `rabbitmq_vhost_users` list)
-`rabbitmq_host`             | no       | localhost |                 | the host of RabbitMQ broker owning the vhost
-`rabbitmq_mgmt_port`        | no       | 15672     |                 | the port used on `rabbitmq_host` to connect to the management plugin
+`rabbitmq_admin_password`   | no       |           |                 | the password used to authenticate `rabbitmq_admin_user` (UNTESTED)
+`rabbitmq_admin_user`       | no       | guest     |                 | a user able to administer the vhost (doesn't need to have permission on it as long as it is also provided in the `rabbitmq_vhost_users` list) (UNTESTED)
+`rabbitmq_host`             | no       | localhost |                 | the host of RabbitMQ broker owning the vhost (UNTESTED)
+`rabbitmq_mgmt_port`        | no       | 15672     |                 | the port used on `rabbitmq_host` to connect to the management plugin (UNTESTED)
 `rabbimtq_node`             | no       | rabbit    |                 | the erlang node of the rabbitmq server being configured
-`rabbitmq_vhost_exchanges`  | no       | []        |                 | the exchanges to add, modify, or remove from the vhost
+`rabbitmq_vhost_exchanges`  | no       | []        |                 | the exchanges to add, modify, or remove from the vhost (UNTESTED)
 `rabbitmq_vhost_name`       | yes      |           |                 | the name of the vhost to manage
-`rabbitmq_vhost_parameters` | no       | []        |                 | the parameters to add, modify, or remove from the vhost
-`rabbitmq_vhost_policies`   | no       | []        |                 | the policies to add or remove from the vhost
-`rabbitmq_vhost_queues`     | no       | []        |                 | the queues to add, modify, or remove from the vhost
+`rabbitmq_vhost_parameters` | no       | []        |                 | the parameters to add, modify, or remove from the vhost (UNTESTED)
+`rabbitmq_vhost_policies`   | no       | []        |                 | the policies to add or remove from the vhost (UNTESTED)
+`rabbitmq_vhost_queues`     | no       | []        |                 | the queues to add, modify, or remove from the vhost (UNTESTED)
 `rabbitmq_vhost_state`      | no       | present   | absent, present | whether or not the vhost should be present on the server being configured
-`rabbitmq_vhost_tracing`    | no       | false     |                 | whether or not tracing should be enabled for this vhost
+`rabbitmq_vhost_tracing`    | no       | false     |                 | whether or not tracing should be enabled for this vhost (UNTESTED)
 `rabbitmq_vhost_users`      | no       | []        |                 | the users to add, modify, or remove from the vhost
 
 
