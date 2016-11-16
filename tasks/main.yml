@@ -48,7 +48,7 @@
         state: "{{ item.state | default(exchange_default.state) }}"
         auto_delete: "{{ item.auto_delete | default(omit) }}"
         durable: "{{ item.durable | default(exchange_default.durable) }}"
-        exchange_type: "{{ item.type | default(exchange_default_type) }}"
+        exchange_type: "{{ item.type | default(exchange_default.type) }}"
         internal: "{{ item.internal | default(omit) }}"
         arguments: "{{ item.arguments | default(omit) }}"
 

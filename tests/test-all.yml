@@ -5,12 +5,16 @@
 
   roles:
     - role: CyVerse-Ansible.rabbitmq-vhost
+      rabbitmq_admin_user: admin
+      rabbitmq_admin_password: password
       rabbitmq_vhost_name: /vhost
       rabbitmq_vhost_users: 
         - name: admin
           configure_priv: .*
           read_priv: .*
           write_priv: .*
+#      rabbitmq_vhost_exchanges:
+#        - name: exchange
 
   post_tasks:
     - tags:
@@ -30,6 +34,12 @@
               cmd: |
                 rabbitmqctl list_permissions -p /vhost \
                   | grep --quiet --regexp '^admin[[:space:]]*\.\*[[:space:]]*\.\*[[:space:]]*\.\*$'
+
+            - name: Verify tags are unchanged
+              cmd: | 
+                rabbitmqctl list_users \
+                | grep --quiet \
+                       --regexp '^admin[[:space:]]*\[administrator,[[:space:]]*monitoring\]$'
 
         - when: any_failed
           fail:

@@ -7,11 +7,34 @@
 #   read_priv:      optional
 #   write_priv:     optional
 
-- name: verify that user {{ user.name }} exists
-  shell: rabbitmqctl list_users | grep --regexp '^{{ user.name }}[[:space:]].*'
+- name: retrieve tags for {{ user.name }}
+  shell: |
+    rabbitmqctl -n {{ rabbitmq_node }} list_users \
+      | grep --regexp '^{{ user.name }}[[:space:]]*\[.*\]$' \
+      | sed 's/^{{ user.name }}[[:space:]]*\[\(.*\)\]$/\1/'
+  register: tag_resp   
+  changed_when: false
+
+# XXX - There is a bug in rabbitmq_user where it always says that something changed if tags is
+# specified.
+- name: retrieve privileges for {{ user.name }}
+  shell: |
+    actPerm="$(rabbitmqctl -n {{ rabbitmq_node }} list_user_permissions {{ user.name }} \
+            | grep --regexp '^{{ rabbitmq_vhost_name }}[[:space:]]')"
+    printf -v expPerm '%s\t%s\t%s\t%s' \
+                      '{{ rabbitmq_vhost_name }}' \
+                      '{{ user.configure_priv | default(user_default.configure_priv) }}' \
+                      '{{ user.write_priv | default(user_default.write_priv) }}' \
+                      '{{ user.read_priv | default(user_default.read_priv) }}'
+    if [ "$actPerm" != "$expPerm" ]
+    then
+      printf 'changed'
+    fi
+  register: response 
   changed_when: false
 
 - name: configure user {{ user.name }}
+  when: response.stdout == 'changed'
   rabbitmq_user:
     node: "{{ rabbitmq_node }}"
     vhost: "{{ rabbitmq_vhost_name }}"
@@ -19,4 +42,4 @@
     configure_priv: "{{ user.configure_priv | default(user_default.configure_priv) }}"
     read_priv: "{{ user.read_priv | default(user_default.read_priv) }}"
     write_priv: "{{ user.write_priv | default(user_default.write_priv) }}"
-
+    tags: "{{ tag_resp.stdout }}"

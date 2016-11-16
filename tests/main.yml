@@ -28,15 +28,17 @@
         name: rabbitmq-server
         state: restarted
 
+    - name: create user admin
+      rabbitmq_user:
+        user: admin
+        force: true
+        password: password
+        tags: "administrator,monitoring"
+
     - name: create user user
       rabbitmq_user:
         name: user
         force: true
 
-    - name: create user admin
-      rabbitmq_user:
-        user: admin
-        force: true
-        
 - include: test-minimal-user.yml
 - include: test-all.yml
