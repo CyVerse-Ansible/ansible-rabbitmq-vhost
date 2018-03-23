@@ -16,7 +16,7 @@
         - set_fact:
             any_failed: false
 
-        - include: tasks/test.yml
+        - include_tasks: tasks/test.yml
           vars:
             test: "{{ item }}"
           with_items:
@@ -27,4 +27,4 @@
 
         - when: any_failed
           fail:
-            msg: some of the tests failed 
+            msg: some of the tests failed

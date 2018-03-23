@@ -8,7 +8,7 @@
       rabbitmq_admin_user: admin
       rabbitmq_admin_password: password
       rabbitmq_vhost_name: /vhost
-      rabbitmq_vhost_users: 
+      rabbitmq_vhost_users:
         - name: admin
           configure_priv: .*
           read_priv: .*
@@ -23,7 +23,7 @@
         - set_fact:
             any_failed: false
 
-        - include: tasks/test.yml
+        - include_tasks: tasks/test.yml
           vars:
             test: "{{ item }}"
           with_items:
@@ -36,7 +36,7 @@
                   | grep --quiet --regexp '^admin[[:space:]]*\.\*[[:space:]]*\.\*[[:space:]]*\.\*$'
 
             - name: Verify tags are unchanged
-              cmd: | 
+              cmd: |
                 rabbitmqctl list_users \
                 | grep --quiet \
                        --regexp '^admin[[:space:]]*\[administrator,[[:space:]]*monitoring\]$'

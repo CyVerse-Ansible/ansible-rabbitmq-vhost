@@ -32,7 +32,7 @@
 
     - name: configure users
       with_items: "{{ rabbitmq_vhost_users }}"
-      include: user.yml
+      include_tasks: user.yml
       vars:
         user: "{{ item }}"
 
@@ -40,7 +40,7 @@
       with_items: "{{ rabbitmq_vhost_exchanges }}"
       rabbitmq_exchange:
         login_host: "{{ rabbitmq_host }}"
-        login_port: "{{ rabbitmq_mgmt_port }}"        
+        login_port: "{{ rabbitmq_mgmt_port }}"
         login_user: "{{ rabbitmq_admin_user }}"
         login_password: "{{ rabbitmq_admin_password | default(omit) }}"
         vhost: "{{ rabbitmq_vhost_name }}"
@@ -55,17 +55,17 @@
     - name: bind exchanges
       with_items: "{{ rabbitmq_vhost_exchanges }}"
       when: item.state == "present"
-      include: bind.yml
+      include_tasks: bind.yml
       vars:
         destination: "{{ item.name }}"
         destination_type: exchange
-        bindings: "{{ item.bindings }}"   
+        bindings: "{{ item.bindings }}"
 
     - name: configure queues
       with_items: "{{ rabbitmq_vhost_queues }}"
-      rabbitmq_queue: 
+      rabbitmq_queue:
         login_host: "{{ rabbitmq_host }}"
-        login_port: "{{ rabbitmq_mgmt_port }}"        
+        login_port: "{{ rabbitmq_mgmt_port }}"
         login_user: "{{ rabbitmq_admin_user }}"
         login_password: "{{ rabbitmq_admin_password | default(omit) }}"
         vhost: "{{ rabbitmq_vhost_name }}"
@@ -73,9 +73,9 @@
         state: "{{ item.state | default(queue_default.state) }}"
         auto_delete: "{{ item.auto_delete | default(omit) }}"
         auto_expires: "{{ item.auto_expires | default(queue_default.auto_expires) }}"
-        dead_letter_exchange: "{{ item.dead_letter_exchange 
+        dead_letter_exchange: "{{ item.dead_letter_exchange
                                 | default(queue_default.dead_letter_exchange) }}"
-        dead_letter_routing_key: "{{ item.dead_letter_routing_key 
+        dead_letter_routing_key: "{{ item.dead_letter_routing_key
                                    | default(queue_default.dead_letter_routing_key) }}"
         durable: "{{ item.durable | default(queue_default.durable) }}"
         max_length: "{{ item.max_length | default(queue_default.max_length) }}"
@@ -85,7 +85,7 @@
     - name: bind queues
       with_items: "{{ rabbitmq_vhost_queues }}"
       when: item.state == "present"
-      include: bind.yml
+      include_tasks: bind.yml
       vars:
         destination: "{{ item.name }}"
         destination_type: queue

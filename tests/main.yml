@@ -17,12 +17,12 @@
 
     - name: install rabbitmq broker
       yum:
-        name: https://www.rabbitmq.com/releases/rabbitmq-server/v3.3.1/rabbitmq-server-3.3.1-1.noarch.rpm 
+        name: https://www.rabbitmq.com/releases/rabbitmq-server/v3.3.1/rabbitmq-server-3.3.1-1.noarch.rpm
 
     - name: enable management plugin
       rabbitmq_plugin:
         names: rabbitmq_management
-                
+
     - name: start rabbitmq broker
       service:
         name: rabbitmq-server
@@ -40,5 +40,5 @@
         name: user
         force: true
 
-- include: test-minimal-user.yml
-- include: test-all.yml
+- import_playbook: test-minimal-user.yml
+- import_playbook: test-all.yml
