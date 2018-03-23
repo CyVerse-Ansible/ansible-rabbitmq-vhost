@@ -1,6 +1,7 @@
 Role Name
 =========
 [![Build Status](https://travis-ci.org/CyVerse-Ansible/ansible-rabbitmq-vhost.svg?branch=master)](https://travis-ci.org/CyVerse-Ansible/ansible-rabbitmq-vhost)
+[![Ansible Galaxy](https://img.shields.io/ansible/role/13394.svg)](https://galaxy.ansible.com/CyVerse-Ansible/rabbitmq-vhost/)
 
 This is a role for configuring a vhost on a RabbitMQ broker.
 
@@ -29,7 +30,7 @@ Variable                    | Required | Default   | Choices         | Comments
 `rabbitmq_vhost_users`      | no       | []        |                 | the users to add, modify, or remove from the vhost
 
 
-`irods_vhost_parameters` item 
+`irods_vhost_parameters` item
 
 Field       | Required | Default | Choices         | Comments
 ----------- | -------- | ------- | --------------- | --------
