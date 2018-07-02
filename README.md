@@ -142,7 +142,7 @@ Here's an example playbook that configures a vhost `/prod/data-store` with three
 License
 -------
 
-BSD
+[license](/LICENSE.txt)
 
 Author Information
 ------------------
