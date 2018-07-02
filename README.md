@@ -111,7 +111,7 @@ Here's an example playbook that configures a vhost `/prod/data-store` with three
 ```yaml
 - hosts: amqp_brokers
   roles:
-    - role: cyverse.rabbitmq_vhost
+    - role: CyVerse_Ansible.rabbitmq_vhost
       rabbitmq_admin_user: admin
       rabbitmq_vhost_name: /prod/data-store
       rabbitmq_vhost_users:
@@ -142,9 +142,11 @@ Here's an example playbook that configures a vhost `/prod/data-store` with three
 License
 -------
 
-[license](/LICENSE.txt)
+See [license](/LICENSE.txt).
 
 Author Information
 ------------------
 
-Tony Edgin
+Tony Edgin  
+<tedgin@cyverse.org>  
+[CyVerse](https://cyverse.org)
