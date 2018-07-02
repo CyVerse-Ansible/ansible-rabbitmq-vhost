@@ -1,7 +1,7 @@
 Role Name
 =========
 [![Build Status](https://travis-ci.org/CyVerse-Ansible/ansible-rabbitmq-vhost.svg?branch=master)](https://travis-ci.org/CyVerse-Ansible/ansible-rabbitmq-vhost)
-[![Ansible Galaxy](https://img.shields.io/badge/role-CyVerse__Ansible.rabbitmq--vhost-blue.svg)](https://galaxy.ansible.com/CyVerse-Ansible/rabbitmq-vhost/)
+[![Ansible Galaxy](https://img.shields.io/badge/role-CyVerse__Ansible.rabbitmq--vhost-blue.svg)](https://galaxy.ansible.com/CyVerse_Ansible/rabbitmq-vhost/)
 
 This is a role for configuring a vhost on a RabbitMQ broker.
 

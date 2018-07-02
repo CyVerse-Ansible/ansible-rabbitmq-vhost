@@ -10,24 +10,24 @@ services:
 env:
   - distribution: centos
     version: 6
-    ROLE_DIR: /etc/ansible/roles/CyVerse-Ansible.rabbitmq-vhost
-    TEST_DIR: /etc/ansible/roles/CyVerse-Ansible.rabbitmq-vhost/tests
+    ROLE_DIR: /etc/ansible/roles/CyVerse_Ansible.rabbitmq-vhost
+    TEST_DIR: /etc/ansible/roles/CyVerse_Ansible.rabbitmq-vhost/tests
 
 before_install:
   # Start the container
   - 'sudo docker run --detach --interactive --tty --name=test_dummy --volume="$PWD":"$ROLE_DIR":rw cyverse/ansible-test:latest-"$distribution"-"$version" bash'
-  
+
 script:
   # Syntax check
   - 'sudo docker exec test_dummy ansible-playbook --syntax-check --inventory-file="$TEST_DIR"/inventory "$TEST_DIR"/main.yml'
- 
+
   # Run testing playbook
   - 'sudo docker exec test_dummy ansible-playbook --connection=local --inventory-file="$TEST_DIR"/inventory "$TEST_DIR"/main.yml'
 
   # Idempotence test
   - >
-    sudo docker exec test_dummy ansible-playbook --connection=local --inventory-file="$TEST_DIR"/inventory --skip-tags=test "$TEST_DIR"/main.yml 
-    | grep --quiet --regexp='changed=0.*failed=0' 
+    sudo docker exec test_dummy ansible-playbook --connection=local --inventory-file="$TEST_DIR"/inventory --skip-tags=test "$TEST_DIR"/main.yml
+    | grep --quiet --regexp='changed=0.*failed=0'
     && (echo 'Idempotence test: pass' && exit 0) || (echo 'Idempotence test: fail' && exit 1)
 
 notifications:
