@@ -10,8 +10,8 @@ services:
 env:
   - distribution: centos
     version: 6
-    ROLE_DIR: /etc/ansible/roles/CyVerse_Ansible.rabbitmq-vhost
-    TEST_DIR: /etc/ansible/roles/CyVerse_Ansible.rabbitmq-vhost/tests
+    ROLE_DIR: /etc/ansible/roles/cyverse-ansible.rabbitmq-vhost
+    TEST_DIR: /etc/ansible/roles/cyverse-ansible.rabbitmq-vhost/tests
 
 before_install:
   # Start the container

@@ -2,7 +2,7 @@
 
 readonly distribution=centos
 readonly version=6
-readonly ROLE_DIR=/etc/ansible/roles/CyVerse_Ansible.rabbitmq-vhost
+readonly ROLE_DIR=/etc/ansible/roles/cyverse-ansible.rabbitmq-vhost
 readonly TEST_DIR="$ROLE_DIR"/tests
 
 

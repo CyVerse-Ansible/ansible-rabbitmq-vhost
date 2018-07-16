@@ -4,7 +4,7 @@
   become: true
 
   roles:
-    - role: CyVerse_Ansible.rabbitmq-vhost
+    - role: cyverse-ansible.rabbitmq-vhost
       rabbitmq_vhost_name: /vhost
       rabbitmq_vhost_users:
         - name: user

@@ -1,7 +1,7 @@
 Role Name
 =========
 [![Build Status](https://travis-ci.org/CyVerse-Ansible/ansible-rabbitmq-vhost.svg?branch=master)](https://travis-ci.org/CyVerse-Ansible/ansible-rabbitmq-vhost)
-[![Ansible Galaxy](https://img.shields.io/badge/role-CyVerse__Ansible.rabbitmq--vhost-blue.svg)](https://galaxy.ansible.com/CyVerse_Ansible/rabbitmq-vhost/)
+[![Ansible Galaxy](https://img.shields.io/badge/role-cyverse--ansible.rabbitmq--vhost-blue.svg)](https://galaxy.ansible.com/cyverse-ansible/rabbitmq-vhost/)
 
 This is a role for configuring a vhost on a RabbitMQ broker.
 
@@ -111,7 +111,7 @@ Here's an example playbook that configures a vhost `/prod/data-store` with three
 ```yaml
 - hosts: amqp_brokers
   roles:
-    - role: CyVerse_Ansible.rabbitmq_vhost
+    - role: cyverse-ansible.rabbitmq_vhost
       rabbitmq_admin_user: admin
       rabbitmq_vhost_name: /prod/data-store
       rabbitmq_vhost_users:
