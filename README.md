@@ -8,7 +8,7 @@ This is a role for configuring a vhost on a RabbitMQ broker.
 Requirements
 ------------
 
-It is assumed that a RabbitMQ server is already installed with the management plugin. The RabbitMQ server should be at least version 3.2.
+The managed nodes must have RabbitMQ server installed with the management plugin. The RabbitMQ server should be at least version 3.2.
 
 Role Variables
 --------------

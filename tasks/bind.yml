@@ -5,12 +5,13 @@
 #   - arguments:    optional
 #   - routing_key:  optional
 #   - source:       required
-#   - state:        optional 
+#   - state:        optional
 # destination:      required
 # destination_type: required
 
 - name: bind {{ destination_type }} {{ destination }}
   with_items: "{{ bindings }}"
+  no_log: true
   rabbitmq_binding:
     login_host: "{{ rabbitmq_host }}"
     login_port: "{{ rabbitmq_mgmt_port }}"
@@ -23,4 +24,3 @@
     state: "{{ item.state | default(binding_default.state) }}"
     routing_key: "{{ item.routing_key | default(binding_default.routing_key) }}"
     arguments: "{{ item.arguments | default(omit) }}"
-

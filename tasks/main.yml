@@ -38,6 +38,7 @@
 
     - name: configure exchanges
       with_items: "{{ rabbitmq_vhost_exchanges }}"
+      no_log: true
       rabbitmq_exchange:
         login_host: "{{ rabbitmq_host }}"
         login_port: "{{ rabbitmq_mgmt_port }}"
@@ -63,6 +64,7 @@
 
     - name: configure queues
       with_items: "{{ rabbitmq_vhost_queues }}"
+      no_log: true
       rabbitmq_queue:
         login_host: "{{ rabbitmq_host }}"
         login_port: "{{ rabbitmq_mgmt_port }}"

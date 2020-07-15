@@ -12,7 +12,7 @@
     rabbitmqctl -n {{ rabbitmq_node }} list_users \
       | grep --regexp '^{{ user.name }}[[:space:]]*\[.*\]$' \
       | sed 's/^{{ user.name }}[[:space:]]*\[\(.*\)\]$/\1/'
-  register: tag_resp   
+  register: tag_resp
   changed_when: false
 
 # XXX - There is a bug in rabbitmq_user where it always says that something changed if tags is
@@ -30,11 +30,12 @@
     then
       printf 'changed'
     fi
-  register: response 
+  register: response
   changed_when: false
 
 - name: configure user {{ user.name }}
   when: response.stdout == 'changed'
+  no_log: true
   rabbitmq_user:
     node: "{{ rabbitmq_node }}"
     vhost: "{{ rabbitmq_vhost_name }}"
