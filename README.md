@@ -16,17 +16,17 @@ Role Variables
 Variable                    | Required | Default   | Choices         | Comments
 --------------------------- | -------- | --------- | --------------- | --------
 `rabbitmq_admin_password`   | no       |           |                 | the password used to authenticate `rabbitmq_admin_user` (UNTESTED)
-`rabbitmq_admin_user`       | no       | guest     |                 | a user able to administer the vhost (doesn't need to have permission on it as long as it is also provided in the `rabbitmq_vhost_users` list) (UNTESTED)
+`rabbitmq_admin_user`       | no       | guest     |                 | a user able to administer the vhost (doesn't need to have permission on it as long as `rabbitmq_vhost_users` list provides it) (UNTESTED)
 `rabbitmq_host`             | no       | localhost |                 | the host of RabbitMQ broker owning the vhost (UNTESTED)
 `rabbitmq_mgmt_port`        | no       | 15672     |                 | the port used on `rabbitmq_host` to connect to the management plugin (UNTESTED)
-`rabbimtq_node`             | no       | rabbit    |                 | the erlang node of the rabbitmq server being configured
+`rabbimtq_node`             | no       | rabbit    |                 | the erlang node of the rabbitmq server to configure
 `rabbitmq_vhost_exchanges`  | no       | []        |                 | the exchanges to add, modify, or remove from the vhost (UNTESTED)
 `rabbitmq_vhost_name`       | yes      |           |                 | the name of the vhost to manage
 `rabbitmq_vhost_parameters` | no       | []        |                 | the parameters to add, modify, or remove from the vhost (UNTESTED)
 `rabbitmq_vhost_policies`   | no       | []        |                 | the policies to add or remove from the vhost (UNTESTED)
 `rabbitmq_vhost_queues`     | no       | []        |                 | the queues to add, modify, or remove from the vhost (UNTESTED)
-`rabbitmq_vhost_state`      | no       | present   | absent, present | whether or not the vhost should be present on the server being configured
-`rabbitmq_vhost_tracing`    | no       | false     |                 | whether or not tracing should be enabled for this vhost (UNTESTED)
+`rabbitmq_vhost_state`      | no       | present   | absent, present | whether the vhost should be present on the server
+`rabbitmq_vhost_tracing`    | no       | false     |                 | whether to enable tracing for this vhost (UNTESTED)
 `rabbitmq_vhost_users`      | no       | []        |                 | the users to add, modify, or remove from the vhost
 
 
@@ -34,9 +34,9 @@ Variable                    | Required | Default   | Choices         | Comments
 
 Field       | Required | Default | Choices         | Comments
 ----------- | -------- | ------- | --------------- | --------
-`component` | yes      |         |                 | component where the parameter is to be set
+`component` | yes      |         |                 | set the parameter on this component
 `name`      | yes      |         |                 | name of parameter
-`state`     | no       | present | absent, present | whether or not this parameter should be present on the component
+`state`     | no       | present | absent, present | whether this parameter should be present on the component
 `value`     | no       |         |                 | the value of the parameter as JSON
 
 `irods_vhost_policies` item
@@ -47,7 +47,7 @@ Field      | Required | Default | Choices                | Comment
 `name`     | yes      |         |                        | the name of the policy
 `pattern`  | yes      |         |                        | a regular expression used to match the names of what this policy applies to
 `priority` | no       |         |                        | the priority of the policy
-`state`    | no       | present | absent, present        | whether or not this policy should be present
+`state`    | no       | present | absent, present        | whether this policy should be present
 `tags`     | yes      |         |                        | a dictionary describing the policy
 
 `irods_vhost_users` item
@@ -65,29 +65,29 @@ Field            | Required | Default | Choices         | Comment
 Field         | Required | Default | Choices                        | Comment
 ------------- | -------- | ------- | ------------------------------ | -------
 `arguments`   | no       |         |                                | a dictionary of extra arguments for the exchange
-`auto_delete` | no       |         |                                | a boolean indicating if this exchange is to delete itself once nothing is bound to it
-`bindings`    | no       | []      |                                | a list of binding descriptions for the exchanges this exchange is bound to (don't need to exist as long as they are defined in `irods_vhost_exchanges`)
-`durable`     | no       | true    |                                | whether or not this exchange is durable
-`internal`    | no       |         |                                | a boolean indicating if this exchange is only available for other exchanges
+`auto_delete` | no       |         |                                | a Boolean indicating if this exchange is to delete itself once nothing is bound to it
+`bindings`    | no       | []      |                                | a list of binding descriptions for the exchanges this exchange is bound to (don't need to exist as long as `irods_vhost_exchanges` defines them)
+`durable`     | no       | true    |                                | whether this exchange is durable
+`internal`    | no       |         |                                | a Boolean indicating if this exchange is only available for other exchanges
 `name`        | yes      |         |                                | the name of the exchange
-`state`       | no       | present | absent, present                | whether or not this exchange should be present
-`type`        | no       | direct  | direct, fanout, headers, topic | the type of exchange
+`state`       | no       | present | absent, present                | whether this exchange should be present
+`type`        | no       | direct  | direct, fanout, headers, topic | the exchange type
 
 `irods_vhost_queues` item
 
 Field                     | Required | Default  | Choices         | Comment
 ------------------------- | -------- | -------- | --------------- | -------
 `arguments`               | no       |          |                 | a dictionary of extra arguments for the queue
-`auto_delete`             | no       |          |                 | a boolean indicating if this queue should delete itself when nothing is connected to it
-`auto_expires`            | no       | forever  |                 | how long (in milliseconds) this queue can be unused before it deletes itself
-`bindings`                | no       | []       |                 | a list of binding descriptions for the exchanges this queue is bound to (don't need to exist as long as they are defined in `irods_vhost_exchanges`)
-`dead_letter_exchange`    | no       | null     |                 | the name of an exchange where messages will be republished if they expire or are rejected (doesn't need to exist as long as it is defined in `irods_vhost_exchanges`)
-`dead_letter_routing_key` | no       | null     |                 | the replacement routing key to use when a message is republished to the `dead_letter_exchange` exchange
-`durable`                 | no       | true     |                 | whether or not the queue is durable
+`auto_delete`             | no       |          |                 | a Boolean indicating if this queue should delete itself when nothing is connected to it
+`auto_expires`            | no       | forever  |                 | how long (in milliseconds) this queue remains unbound before it deletes itself
+`bindings`                | no       | []       |                 | a list of binding descriptions for the exchanges this queue is bound to (don't need to exist as long as `irods_vhost_exchanges` defines them)
+`dead_letter_exchange`    | no       | null     |                 | the name of an exchange to republish messages if they expire or are rejected (doesn't need to exist as long as `irods_vhost_exchanges` defines them)
+`dead_letter_routing_key` | no       | null     |                 | the replacement routing key to use when republishing a message to the `dead_letter_exchange` exchange
+`durable`                 | no       | true     |                 | whether the queue is durable
 `max_length`              | no       | no limit |                 | how many messages this queue can contain before it start rejecting them
-`message_ttl`             | no       | forever  |                 | how long (in milliseconds) a message can live in this queue before it is discarded
+`message_ttl`             | no       | forever  |                 | how long (in milliseconds) a message can live in this queue before discarding it
 `name`                    | yes      |          |                 | the name of the queue
-`state`                   | no       | present  | absent, present | whether or not this queue should be present
+`state`                   | no       | present  | absent, present | whether this queue should be present
 
 `bindings` item
 
@@ -106,7 +106,7 @@ Dependencies
 Example Playbook
 ----------------
 
-Here's an example playbook that configures a vhost `/prod/data-store` with three users, an exchange, and two queues. The two queues are bound to the exchange.
+Here's an example playbook that configures a vhost `/prod/data-store` with three users, an exchange, and two queues. The exchange has two queues bound to it.
 
 ```yaml
 - hosts: amqp_brokers
