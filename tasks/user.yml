@@ -9,6 +9,7 @@
 
 - name: retrieve tags for {{ user.name }}
   shell: |
+    set -o pipefail
     rabbitmqctl -n {{ rabbitmq_node }} list_users \
       | grep --regexp '^{{ user.name }}[[:space:]]*\[.*\]$' \
       | sed 's/^{{ user.name }}[[:space:]]*\[\(.*\)\]$/\1/'
@@ -19,6 +20,7 @@
 # specified.
 - name: retrieve privileges for {{ user.name }}
   shell: |
+    set -o pipefail
     actPerm="$(rabbitmqctl -n {{ rabbitmq_node }} list_user_permissions {{ user.name }} \
             | grep --regexp '^{{ rabbitmq_vhost_name }}[[:space:]]')"
     printf -v expPerm '%s\t%s\t%s\t%s' \
