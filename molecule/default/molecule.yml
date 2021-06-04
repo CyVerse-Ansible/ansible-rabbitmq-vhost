@@ -1,0 +1,19 @@
+---
+dependency:
+  name: galaxy
+  enabled: false
+driver:
+  name: docker
+platforms:
+  - name: instance
+    image: rabbitmq:management-alpine
+    pre_build_image: true
+    override_command: false
+provisioner:
+  name: ansible
+  log: true
+verifier:
+  name: ansible
+lint: |
+  yamllint .
+  ansible-lint .

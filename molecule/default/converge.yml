@@ -1,0 +1,10 @@
+---
+- name: Converge
+  hosts: all
+  tasks:
+    - name: "Include ansible-rabbitmq-vhost"
+      include_role:
+        name: "ansible-rabbitmq-vhost"
+      vars:
+        rabbitmq_node: rabbit@instance
+        rabbitmq_vhost_name: /vhost

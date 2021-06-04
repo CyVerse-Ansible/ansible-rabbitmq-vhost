@@ -1,7 +1,9 @@
 galaxy_info:
-  author: Tony Edgin
+  role_name: rabbitmq_vhost
+  namespace: cyverse
   description: An ansible role for managing a RabbitMQ vhost
   company: CyVerse
+  author: Tony Edgin
 
   # If the issue tracker for your role is not on github, uncomment the
   # next line and provide a value
@@ -16,7 +18,7 @@ galaxy_info:
   # - CC-BY
   license: See LICENSE.txt
 
-  min_ansible_version: 2.1.1
+  min_ansible_version: 2.11.1
 
   # Optionally specify the branch Galaxy will use when accessing the GitHub
   # repo for this role. During role install, if no tags are available,
@@ -34,7 +36,7 @@ galaxy_info:
   platforms:
     - name: EL
       versions:
-        - 6
+        - 7
 
   galaxy_tags: []
     # List tags for your role here, one per line. A tag is
