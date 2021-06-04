@@ -1,34 +1,11 @@
 ---
-language: python
-python: "2.7"
-
-# Use the new container infrastructure
 sudo: true
+language: python
 services:
   - docker
-
-env:
-  - distribution: centos
-    version: 6
-    ROLE_DIR: /etc/ansible/roles/cyverse-ansible.rabbitmq-vhost
-    TEST_DIR: /etc/ansible/roles/cyverse-ansible.rabbitmq-vhost/tests
-
-before_install:
-  # Start the container
-  - 'sudo docker run --detach --interactive --tty --name=test_dummy --volume="$PWD":"$ROLE_DIR":rw cyverse/ansible-test:latest-"$distribution"-"$version" bash'
-
+install:
+  - python3 -m pip install ansible molecule
 script:
-  # Syntax check
-  - 'sudo docker exec test_dummy ansible-playbook --syntax-check --inventory-file="$TEST_DIR"/inventory "$TEST_DIR"/main.yml'
-
-  # Run testing playbook
-  - 'sudo docker exec test_dummy ansible-playbook --connection=local --inventory-file="$TEST_DIR"/inventory "$TEST_DIR"/main.yml'
-
-  # Idempotence test
-  - >
-    sudo docker exec test_dummy ansible-playbook --connection=local --inventory-file="$TEST_DIR"/inventory --skip-tags=test "$TEST_DIR"/main.yml
-    | grep --quiet --regexp='changed=0.*failed=0'
-    && (echo 'Idempotence test: pass' && exit 0) || (echo 'Idempotence test: fail' && exit 1)
-
+  - molecule test
 notifications:
   webhooks: https://galaxy.ansible.com/api/v1/notifications/

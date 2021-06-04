@@ -2,9 +2,24 @@
 - name: Converge
   hosts: all
   tasks:
-    - name: "Include ansible-rabbitmq-vhost"
+    - name: create minimal user
       include_role:
-        name: "ansible-rabbitmq-vhost"
+        name: ansible-rabbitmq-vhost
       vars:
-        rabbitmq_node: rabbit@instance
         rabbitmq_vhost_name: /vhost
+        rabbitmq_vhost_users:
+          - name: user
+
+    - name: create vhost
+      include_role:
+        name: ansible-rabbitmq-vhost
+      vars:
+        rabbitmq_admin_user: admin
+        rabbitmq_admin_passowrd: password
+        rabbitmq_vhost_name: /vhost
+        rabbitmq_vhost_users:
+          - name: admin
+            configure_priv: .*
+            read_priv: .*
+            write_priv: .*
+            

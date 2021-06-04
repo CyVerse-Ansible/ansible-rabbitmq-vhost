@@ -1,27 +1,27 @@
 ---
-- name: Create or remove vhost
+- name: main | Create or remove vhost
   rabbitmq_vhost:
-    node: "{{ rabbitmq_node }}"
+    node: "{{ rabbitmq_node | default(omit) }}"
     name: "{{ rabbitmq_vhost_name }}"
     state: "{{ rabbitmq_vhost_state }}"
     tracing: "{{ rabbitmq_vhost_tracing }}"
 
 - when: rabbitmq_vhost_state == "present"
   block:
-    - name: configure parameters
+    - name: main | configure parameters
       with_items: "{{ rabbitmq_vhost_parameters }}"
       rabbitmq_parameter:
-        node: "{{ rabbitmq_node }}"
+        node: "{{ rabbitmq_node | default(omit) }}"
         vhost: "{{ rabbitmq_vhost_name }}"
         component: "{{ item.component }}"
         name: "{{ item.name }}"
         state: "{{ item.state | default(parameter_default.state) }}"
         value: "{{ item.value | default(omit) }}"
 
-    - name: configure policies
+    - name: main | configure policies
       with_items: "{{ rabbitmq_vhost_policies }}"
       rabbitmq_policy:
-        node: "{{ rabbitmq_node }}"
+        node: "{{ rabbitmq_node | default(omit) }}"
         vhost: "{{ rabbitmq_vhost_name }}"
         name: "{{ item.name }}"
         pattern: "{{ item.pattern }}"
@@ -30,13 +30,13 @@
         apply_to: "{{ item.apply_to | default(policy_default.apply_to) }}"
         priority: "{{ item.priority | default(omit) }}"
 
-    - name: configure users
+    - name: main | configure users
       with_items: "{{ rabbitmq_vhost_users }}"
       include_tasks: user.yml
       vars:
         user: "{{ item }}"
 
-    - name: configure exchanges
+    - name: main | configure exchanges
       with_items: "{{ rabbitmq_vhost_exchanges }}"
       no_log: true
       rabbitmq_exchange:
@@ -53,7 +53,7 @@
         internal: "{{ item.internal | default(omit) }}"
         arguments: "{{ item.arguments | default(omit) }}"
 
-    - name: bind exchanges
+    - name: main | bind exchanges
       with_items: "{{ rabbitmq_vhost_exchanges }}"
       when: item.state == "present"
       include_tasks: bind.yml
@@ -62,7 +62,7 @@
         destination_type: exchange
         bindings: "{{ item.bindings }}"
 
-    - name: configure queues
+    - name: main | configure queues
       with_items: "{{ rabbitmq_vhost_queues }}"
       no_log: true
       rabbitmq_queue:
@@ -84,7 +84,7 @@
         message_ttl: "{{ item.message_ttl | default(queue_default.message_ttl) }}"
         arguments: "{{ item.arguments | default(omit) }}"
 
-    - name: bind queues
+    - name: main | bind queues
       with_items: "{{ rabbitmq_vhost_queues }}"
       when: item.state == "present"
       include_tasks: bind.yml

@@ -1,7 +1,6 @@
 ---
 dependency:
   name: galaxy
-  enabled: false
 driver:
   name: docker
 platforms:
@@ -11,9 +10,7 @@ platforms:
     override_command: false
 provisioner:
   name: ansible
-  log: true
 verifier:
   name: ansible
 lint: |
-  yamllint .
-  ansible-lint .
+  bash -c 'set -e; yamllint .; ansible-lint .'

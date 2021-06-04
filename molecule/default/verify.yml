@@ -1,10 +1,27 @@
 ---
-# This is an example playbook to execute Ansible tests.
-
 - name: Verify
   hosts: all
   gather_facts: false
   tasks:
-  - name: Example assertion
-    assert:
-      that: true
+    - name: verify user user has correct permissions
+      shell: |
+        rabbitmqctl list_permissions -p /vhost \
+          | grep -q -e '^user[[:space:]]*\^\$[[:space:]]*\^\$[[:space:]]*\^\$$'
+      changed_when: false
+
+    - name: verify the vhost /vhost created
+      shell: |
+        rabbitmqctl list_vhosts | grep -q -e '^/vhost$'
+      changed_when: false
+
+    - name: verify user admin has correct permissions
+      shell: |
+        rabbitmqctl list_permissions -p /vhost \
+          | grep -q -e '^admin[[:space:]]*\.\*[[:space:]]*\.\*[[:space:]]*\.\*$'
+      changed_when: false
+
+    - name: verify tags are unchanged
+      shell: |
+        rabbitmqctl list_users \
+          | grep -q -e '^admin[[:space:]]*\[administrator,[[:space:]]*monitoring\]$'
+      changed_when: false

@@ -1,7 +1,6 @@
 ---
 rabbitmq_host: "{{ host_default }}"
 rabbitmq_mgmt_port: "{{ mgmt_port_default }}"
-rabbitmq_node: "{{ node_default }}"
 rabbitmq_admin_user: "{{ admin_user_default }}"
 
 rabbitmq_vhost_state: "{{ vhost_state_default }}"

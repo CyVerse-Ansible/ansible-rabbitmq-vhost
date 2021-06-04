@@ -9,7 +9,7 @@
 # destination:      required
 # destination_type: required
 
-- name: bind {{ destination_type }} {{ destination }}
+- name: bind | bind {{ destination_type }} {{ destination }}
   with_items: "{{ bindings }}"
   no_log: true
   rabbitmq_binding:
