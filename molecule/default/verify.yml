@@ -2,6 +2,8 @@
 - name: Verify
   hosts: all
   gather_facts: false
+  collections:
+    - ansible.builtin
   tasks:
     - name: verify user user has correct permissions
       shell: |

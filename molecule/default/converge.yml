@@ -1,6 +1,8 @@
 ---
 - name: Converge
   hosts: all
+  collections:
+    - ansible.builtin
   tasks:
     - name: create minimal user
       include_role:
@@ -22,4 +24,3 @@
             configure_priv: .*
             read_priv: .*
             write_priv: .*
-            
