@@ -15,27 +15,7 @@
   register: tag_resp
   changed_when: false
 
-# XXX - There is a bug in rabbitmq_user where it always says that something changed if tags is
-# specified.
-- name: user | retrieve privileges for {{ user.name }}
-  shell: |
-    set -o pipefail
-    actPerm="$(rabbitmqctl {{ '-n ' ~ rabbitmq_node if rabbitmq_node is defined }} \
-        list_user_permissions {{ user.name }} \
-      | grep -e '^{{ rabbitmq_vhost_name }}[[:space:]]')"
-    expPerm="$(printf '%s\t%s\t%s\t%s' \
-      '{{ rabbitmq_vhost_name }}' \
-      '{{ user.configure_priv | default(user_default.configure_priv) }}' \
-      '{{ user.write_priv | default(user_default.write_priv) }}' \
-      '{{ user.read_priv | default(user_default.read_priv) }}')"
-    if [[ "$actPerm" != "$expPerm" ]]; then
-      printf 'changed'
-    fi
-  register: response
-  changed_when: false
-
 - name: user | configure user {{ user.name }}
-  when: response.stdout == 'changed'
   no_log: true
   rabbitmq_user:
     node: "{{ rabbitmq_node | default(omit) }}"
