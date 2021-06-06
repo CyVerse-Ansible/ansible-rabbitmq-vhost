@@ -19,7 +19,7 @@
         name: ansible-rabbitmq-vhost
       vars:
         rabbitmq_admin_user: admin
-        rabbitmq_admin_passowrd: password
+        rabbitmq_admin_password: password
         rabbitmq_vhost_name: /vhost2
         rabbitmq_vhost_users:
           - name: admin
