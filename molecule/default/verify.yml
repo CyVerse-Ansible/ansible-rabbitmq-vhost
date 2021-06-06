@@ -8,7 +8,7 @@
     - name: verify user user has correct permissions
       shell: |
         rabbitmqctl list_permissions -p /vhost1 \
-          | grep -q -e '^user[[:space:]]*\^\$[[:space:]]*\^\$[[:space:]]*\^\$$'
+          | grep -q -e '^user[[:space:]]\+\^\$[[:space:]]\+\^\$[[:space:]]\+\^\$$'
       changed_when: false
 
     - name: verify the vhost /vhost2 created
@@ -19,11 +19,16 @@
     - name: verify user admin has correct permissions
       shell: |
         rabbitmqctl list_permissions -p /vhost2 \
-          | grep -q -e '^admin[[:space:]]*\.\*[[:space:]]*\.\*[[:space:]]*\.\*$'
+          | grep -q -e '^admin[[:space:]]\+\.\*[[:space:]]\+\.\*[[:space:]]\+\.\*$'
       changed_when: false
 
     - name: verify tags are unchanged
       shell: |
         rabbitmqctl list_users \
-          | grep -q -e '^admin[[:space:]]*\[administrator,[[:space:]]*monitoring\]$'
+          | grep -q -e '^admin[[:space:]]\+\[administrator,[[:space:]]*monitoring\]$'
+      changed_when: false
+
+    - name: verify topic-exchange exchange was created
+      shell: |
+        rabbitmqctl list_exchanges -p /vhost2 | grep -q -e '^topic-exchange[[:space:]]\+topic$'
       changed_when: false

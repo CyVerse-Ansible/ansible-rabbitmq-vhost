@@ -14,11 +14,11 @@ Role Variables
 
 Variable                    | Required | Default   | Choices         | Comments
 --------------------------- | -------- | --------- | --------------- | --------
-`rabbitmq_admin_password`   | no       |           |                 | the password used to authenticate `rabbitmq_admin_user` (UNTESTED)
-`rabbitmq_admin_user`       | no       | guest     |                 | a user able to administer the vhost (doesn't need to have permission on it as long as `rabbitmq_vhost_users` list provides it) (UNTESTED)
+`rabbitmq_admin_password`   | no       |           |                 | the password used to authenticate `rabbitmq_admin_user`
+`rabbitmq_admin_user`       | no       | guest     |                 | a user able to administer the vhost (doesn't need to have permission on it as long as `rabbitmq_vhost_users` list provides it)
 `rabbitmq_mgmt_port`        | no       | 15672     |                 | the port used to connect to the management plugin (UNTESTED)
 `rabbimtq_node`             | no       | rabbit    |                 | the erlang node of the rabbitmq server to configure
-`rabbitmq_vhost_exchanges`  | no       | []        |                 | the exchanges to add, modify, or remove from the vhost (UNTESTED)
+`rabbitmq_vhost_exchanges`  | no       | []        |                 | the exchanges to add, modify, or remove from the vhost
 `rabbitmq_vhost_name`       | yes      |           |                 | the name of the vhost to manage
 `rabbitmq_vhost_parameters` | no       | []        |                 | the parameters to add, modify, or remove from the vhost (UNTESTED)
 `rabbitmq_vhost_policies`   | no       | []        |                 | the policies to add or remove from the vhost (UNTESTED)
@@ -62,13 +62,13 @@ Field            | Required | Default | Choices         | Comment
 
 Field         | Required | Default | Choices                        | Comment
 ------------- | -------- | ------- | ------------------------------ | -------
-`arguments`   | no       |         |                                | a dictionary of extra arguments for the exchange
-`auto_delete` | no       |         |                                | a Boolean indicating if this exchange is to delete itself once nothing is bound to it
-`bindings`    | no       | []      |                                | a list of binding descriptions for the exchanges this exchange is bound to (don't need to exist as long as `irods_vhost_exchanges` defines them)
-`durable`     | no       | true    |                                | whether this exchange is durable
-`internal`    | no       |         |                                | a Boolean indicating if this exchange is only available for other exchanges
+`arguments`   | no       |         |                                | a dictionary of extra arguments for the exchange (UNTESTED)
+`auto_delete` | no       |         |                                | a Boolean indicating if this exchange is to delete itself once nothing is bound to it (UNTESTED)
+`bindings`    | no       | []      |                                | a list of binding descriptions for the exchanges this exchange is bound to (don't need to exist as long as `irods_vhost_exchanges` defines them) (UNTESTED)
+`durable`     | no       | true    |                                | whether this exchange is durable (UNTESTED)
+`internal`    | no       |         |                                | a Boolean indicating if this exchange is only available for other exchanges (UNTESTED)
 `name`        | yes      |         |                                | the name of the exchange
-`state`       | no       | present | absent, present                | whether this exchange should be present
+`state`       | no       | present | absent, present                | whether this exchange should be present (UNTESTED)
 `type`        | no       | direct  | direct, fanout, headers, topic | the exchange type
 
 `irods_vhost_queues` item

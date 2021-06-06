@@ -26,3 +26,6 @@
             configure_priv: .*
             read_priv: .*
             write_priv: .*
+        rabbitmq_vhost_exchanges:
+          - name: topic-exchange
+            type: topic
