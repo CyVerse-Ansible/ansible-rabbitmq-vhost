@@ -2,8 +2,14 @@
 - name: Prepare
   hosts: all
   collections:
+    - ansible.builtin
     - community.rabbitmq
   tasks:
+    - name: install requests library
+      package:
+        name: py3-requests
+        state: present
+
     - name: create user admin
       rabbitmq_user:
         user: admin
