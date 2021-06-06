@@ -9,7 +9,6 @@
 - when: rabbitmq_vhost_state == "present"
   block:
     - name: main | configure parameters
-      with_items: "{{ rabbitmq_vhost_parameters }}"
       rabbitmq_parameter:
         node: "{{ rabbitmq_node | default(omit) }}"
         vhost: "{{ rabbitmq_vhost_name }}"
@@ -17,9 +16,11 @@
         name: "{{ item.name }}"
         state: "{{ item.state | default(parameter_default.state) }}"
         value: "{{ item.value | default(omit) }}"
+      with_items: "{{ rabbitmq_vhost_parameters }}"
+      loop_control:
+        label: "{{ item.name }}"
 
     - name: main | configure policies
-      with_items: "{{ rabbitmq_vhost_policies }}"
       rabbitmq_policy:
         node: "{{ rabbitmq_node | default(omit) }}"
         vhost: "{{ rabbitmq_vhost_name }}"
@@ -29,15 +30,17 @@
         state: "{{ item.state | default(policy_default.state) }}"
         apply_to: "{{ item.apply_to | default(policy_default.apply_to) }}"
         priority: "{{ item.priority | default(omit) }}"
+      with_items: "{{ rabbitmq_vhost_policies }}"
+      loop_control:
+        label: "{{ item.name }}"
 
-    - name: main | configure users
+    - include_tasks: user.yml
       with_items: "{{ rabbitmq_vhost_users }}"
-      include_tasks: user.yml
-      vars:
-        user: "{{ item }}"
+      loop_control:
+        loop_var: user
+        label: "{{ user.name }}"
 
     - name: main | configure exchanges
-      with_items: "{{ rabbitmq_vhost_exchanges }}"
       no_log: true
       rabbitmq_exchange:
         login_port: "{{ rabbitmq_mgmt_port }}"
@@ -51,18 +54,21 @@
         exchange_type: "{{ item.type | default(exchange_default.type) }}"
         internal: "{{ item.internal | default(omit) }}"
         arguments: "{{ item.arguments | default(omit) }}"
-
-    - name: main | bind exchanges
       with_items: "{{ rabbitmq_vhost_exchanges }}"
-      when: item.state == "present"
+      loop_control:
+        label: "{{ item.name }}"
+
+    - when: item.state == "present"
       include_tasks: bind.yml
       vars:
         destination: "{{ item.name }}"
         destination_type: exchange
         bindings: "{{ item.bindings }}"
+      with_items: "{{ rabbitmq_vhost_exchanges }}"
+      loop_control:
+        label: "{{ item.name }}"
 
     - name: main | configure queues
-      with_items: "{{ rabbitmq_vhost_queues }}"
       no_log: true
       rabbitmq_queue:
         login_port: "{{ rabbitmq_mgmt_port }}"
@@ -81,12 +87,16 @@
         max_length: "{{ item.max_length | default(queue_default.max_length) }}"
         message_ttl: "{{ item.message_ttl | default(queue_default.message_ttl) }}"
         arguments: "{{ item.arguments | default(omit) }}"
-
-    - name: main | bind queues
       with_items: "{{ rabbitmq_vhost_queues }}"
-      when: item.state == "present"
+      loop_control:
+        label: "{{ item.name }}"
+
+    - when: item.state == "present"
       include_tasks: bind.yml
       vars:
         destination: "{{ item.name }}"
         destination_type: queue
         bindings: "{{ item.bindings }}"
+      with_items: "{{ rabbitmq_vhost_queues }}"
+      loop_control:
+        label: "{{ item.name }}"

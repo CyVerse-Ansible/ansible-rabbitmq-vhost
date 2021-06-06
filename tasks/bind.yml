@@ -10,7 +10,6 @@
 # destination_type: required
 
 - name: bind | bind {{ destination_type }} {{ destination }}
-  with_items: "{{ bindings }}"
   no_log: true
   rabbitmq_binding:
     login_port: "{{ rabbitmq_mgmt_port }}"
@@ -23,3 +22,6 @@
     state: "{{ item.state | default(binding_default.state) }}"
     routing_key: "{{ item.routing_key | default(binding_default.routing_key) }}"
     arguments: "{{ item.arguments | default(omit) }}"
+  with_items: "{{ bindings }}"
+  loop_control:
+    label: "{{ item.source }}->{{ destination }}"
