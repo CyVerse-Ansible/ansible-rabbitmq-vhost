@@ -42,7 +42,7 @@
       loop_control:
         label: "{{ item.name }}"
 
-    - include_tasks: user.yml
+    - include_tasks: permission.yml
       with_items: "{{ rabbitmq_vhost_users }}"
       loop_control:
         loop_var: user

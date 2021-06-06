@@ -7,7 +7,7 @@
 #   read_priv:      optional
 #   write_priv:     optional
 
-- name: user | retrieve tags for {{ user.name }}
+- name: permission | retrieve tags for {{ user.name }}
   shell: |
     set -o pipefail
     rabbitmqctl {{ '-n ' ~ rabbitmq_node if rabbitmq_node is defined }} list_users \
@@ -15,7 +15,7 @@
   register: tag_resp
   changed_when: false
 
-- name: user | configure user {{ user.name }}
+- name: permission | configure permissions for {{ user.name }}
   rabbitmq_user:
     node: "{{ rabbitmq_node | default(omit) }}"
     user: "{{ user.name }}"
