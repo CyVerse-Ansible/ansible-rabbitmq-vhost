@@ -1,5 +1,4 @@
 ---
-host_default: localhost
 mgmt_port_default: 15672
 admin_user_default: guest
 

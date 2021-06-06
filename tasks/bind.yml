@@ -13,7 +13,6 @@
   with_items: "{{ bindings }}"
   no_log: true
   rabbitmq_binding:
-    login_host: "{{ rabbitmq_host }}"
     login_port: "{{ rabbitmq_mgmt_port }}"
     login_user: "{{ rabbitmq_admin_user }}"
     login_password: "{{ rabbitmq_admin_password | default(omit) }}"
