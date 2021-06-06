@@ -18,9 +18,9 @@
 - name: user | configure user {{ user.name }}
   rabbitmq_user:
     node: "{{ rabbitmq_node | default(omit) }}"
-    vhost: "{{ rabbitmq_vhost_name }}"
     user: "{{ user.name }}"
-    configure_priv: "{{ user.configure_priv | default(user_default.configure_priv) }}"
-    read_priv: "{{ user.read_priv | default(user_default.read_priv) }}"
-    write_priv: "{{ user.write_priv | default(user_default.write_priv) }}"
     tags: "{{ tag_resp.stdout }}"
+    vhost: "{{ rabbitmq_vhost_name }}"
+    configure_priv: "{{ user.configure_priv | default(omit) }}"
+    read_priv: "{{ user.read_priv | default(omit) }}"
+    write_priv: "{{ user.write_priv | default(omit) }}"

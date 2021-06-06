@@ -16,7 +16,7 @@ Variable                    | Required | Default   | Choices         | Comments
 --------------------------- | -------- | --------- | --------------- | --------
 `rabbitmq_admin_password`   | no       |           |                 | the password used to authenticate `rabbitmq_admin_user` (UNTESTED)
 `rabbitmq_admin_user`       | no       | guest     |                 | a user able to administer the vhost (doesn't need to have permission on it as long as `rabbitmq_vhost_users` list provides it) (UNTESTED)
-`rabbitmq_mgmt_port`        | no       | 15672     |                 | the port to connect to the management plugin (UNTESTED)
+`rabbitmq_mgmt_port`        | no       | 15672     |                 | the port used to connect to the management plugin (UNTESTED)
 `rabbimtq_node`             | no       | rabbit    |                 | the erlang node of the rabbitmq server to configure
 `rabbitmq_vhost_exchanges`  | no       | []        |                 | the exchanges to add, modify, or remove from the vhost (UNTESTED)
 `rabbitmq_vhost_name`       | yes      |           |                 | the name of the vhost to manage
@@ -43,10 +43,10 @@ Field      | Required | Default | Choices                | Comment
 ---------- | -------- | ------- | ---------------------- | -------
 `apply_to` | no       | all     | all, exchanges, queues | what the policy applies to
 `name`     | yes      |         |                        | the name of the policy
-`pattern`  | yes      |         |                        | a regular expression used to match the names of what this policy applies to
+`pattern`  | no       | ^$      |                        | a regular expression used to match the names of what this policy applies to, not applicable if `state` is `'absent'`
 `priority` | no       |         |                        | the priority of the policy
 `state`    | no       | present | absent, present        | whether this policy should be present
-`tags`     | yes      |         |                        | a dictionary describing the policy
+`tags`     | no       | {}      |                        | a dictionary describing the policy, not applicable if `state` is `'absent'`
 
 `irods_vhost_users` item
 
@@ -77,10 +77,10 @@ Field                     | Required | Default  | Choices         | Comment
 ------------------------- | -------- | -------- | --------------- | -------
 `arguments`               | no       |          |                 | a dictionary of extra arguments for the queue
 `auto_delete`             | no       |          |                 | a Boolean indicating if this queue should delete itself when nothing is connected to it
-`auto_expires`            | no       | forever  |                 | how long (in milliseconds) this queue remains unbound before it deletes itself
+`auto_expires`            | no       |          |                 | how long (in milliseconds) this queue remains unbound before it deletes itself
 `bindings`                | no       | []       |                 | a list of binding descriptions for the exchanges this queue is bound to (don't need to exist as long as `irods_vhost_exchanges` defines them)
-`dead_letter_exchange`    | no       | null     |                 | the name of an exchange to republish messages if they expire or are rejected (doesn't need to exist as long as `irods_vhost_exchanges` defines them)
-`dead_letter_routing_key` | no       | null     |                 | the replacement routing key to use when republishing a message to the `dead_letter_exchange` exchange
+`dead_letter_exchange`    | no       |          |                 | the name of an exchange to republish messages if they expire or are rejected (doesn't need to exist as long as `irods_vhost_exchanges` defines them)
+`dead_letter_routing_key` | no       |          |                 | the replacement routing key to use when republishing a message to the `dead_letter_exchange` exchange, will use origin routing key by default
 `durable`                 | no       | true     |                 | whether the queue is durable
 `max_length`              | no       | no limit |                 | how many messages this queue can contain before it start rejecting them
 `message_ttl`             | no       | forever  |                 | how long (in milliseconds) a message can live in this queue before discarding it

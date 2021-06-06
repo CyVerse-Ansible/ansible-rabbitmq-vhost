@@ -1,43 +1,20 @@
 ---
-mgmt_port_default: 15672
-admin_user_default: guest
-
-vhost_state_default: present
-vhost_tracing_default: false
+vhost_exchanges_default: []
 vhost_parameters_default: []
 vhost_policies_default: []
-vhost_users_default: []
-vhost_exchanges_default: []
 vhost_queues_default: []
+vhost_state_default: present
+vhost_users_default: []
 
-parameter_default:
+exchange_default:
+  bindings: []
   state: present
 
 policy_default:
+  pattern: ^$
   state: present
-  apply_to: all
-
-user_default:
-  configure_priv: ^$
-  read_priv: ^$
-  write_priv: ^$
-
-exchange_default:
-  state: present
-  durable: true
-  type: direct
-  bindings: []
+  tags: {}
 
 queue_default:
-  state: present
-  auto_expires: forever
-  dead_letter_exchange: null
-  dead_letter_routing_key: null
-  durable: true
-  max_length: no limit
-  message_ttl: forever
   bindings: []
-
-binding_default:
   state: present
-  routing_key: '#'

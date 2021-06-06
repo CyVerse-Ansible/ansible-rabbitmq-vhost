@@ -4,7 +4,7 @@
     node: "{{ rabbitmq_node | default(omit) }}"
     name: "{{ rabbitmq_vhost_name }}"
     state: "{{ rabbitmq_vhost_state }}"
-    tracing: "{{ rabbitmq_vhost_tracing }}"
+    tracing: "{{ rabbitmq_vhost_tracing | default(omit) }}"
 
 - when: rabbitmq_vhost_state == "present"
   block:
@@ -14,7 +14,7 @@
         vhost: "{{ rabbitmq_vhost_name }}"
         component: "{{ item.component }}"
         name: "{{ item.name }}"
-        state: "{{ item.state | default(parameter_default.state) }}"
+        state: "{{ item.state | default(omit) }}"
         value: "{{ item.value | default(omit) }}"
       with_items: "{{ rabbitmq_vhost_parameters }}"
       loop_control:
@@ -25,11 +25,19 @@
         node: "{{ rabbitmq_node | default(omit) }}"
         vhost: "{{ rabbitmq_vhost_name }}"
         name: "{{ item.name }}"
-        pattern: "{{ item.pattern }}"
-        tags: "{{ item.tags }}"
         state: "{{ item.state | default(policy_default.state) }}"
-        apply_to: "{{ item.apply_to | default(policy_default.apply_to) }}"
+        pattern: "{{
+          item.pattern |
+          default(
+            policy_default.pattern if item.state|default(policy_default.state) == 'present' else
+            omit) }}"
+        tags: "{{
+          item.tags |
+          default(
+            policy_default.tags if item.state|default(policy_default.state) == 'present' else
+            omit) }}"
         priority: "{{ item.priority | default(omit) }}"
+        apply_to: "{{ item.apply_to | default(omit) }}"
       with_items: "{{ rabbitmq_vhost_policies }}"
       loop_control:
         label: "{{ item.name }}"
@@ -41,62 +49,60 @@
         label: "{{ user.name }}"
 
     - name: main | configure exchanges
-      no_log: true
       rabbitmq_exchange:
-        login_port: "{{ rabbitmq_mgmt_port }}"
-        login_user: "{{ rabbitmq_admin_user }}"
+        login_port: "{{ rabbitmq_mgmt_port | default(omit) }}"
+        login_user: "{{ rabbitmq_admin_user | default(omit) }}"
         login_password: "{{ rabbitmq_admin_password | default(omit) }}"
         vhost: "{{ rabbitmq_vhost_name }}"
         name: "{{ item.name }}"
         state: "{{ item.state | default(exchange_default.state) }}"
         auto_delete: "{{ item.auto_delete | default(omit) }}"
-        durable: "{{ item.durable | default(exchange_default.durable) }}"
-        exchange_type: "{{ item.type | default(exchange_default.type) }}"
+        durable: "{{ item.durable | default(omit) }}"
+        exchange_type: "{{ item.type | default(omit) }}"
         internal: "{{ item.internal | default(omit) }}"
         arguments: "{{ item.arguments | default(omit) }}"
+      no_log: true
       with_items: "{{ rabbitmq_vhost_exchanges }}"
       loop_control:
         label: "{{ item.name }}"
 
-    - when: item.state == "present"
+    - when: item.state|default(exchange_default.state) == "present"
       include_tasks: bind.yml
       vars:
+        bindings: "{{ item.bindings | default(exchange_default.bindings) }}"
         destination: "{{ item.name }}"
         destination_type: exchange
-        bindings: "{{ item.bindings }}"
       with_items: "{{ rabbitmq_vhost_exchanges }}"
       loop_control:
         label: "{{ item.name }}"
 
     - name: main | configure queues
-      no_log: true
       rabbitmq_queue:
-        login_port: "{{ rabbitmq_mgmt_port }}"
-        login_user: "{{ rabbitmq_admin_user }}"
+        login_port: "{{ rabbitmq_mgmt_port | default(omit) }}"
+        login_user: "{{ rabbitmq_admin_user | default(omit) }}"
         login_password: "{{ rabbitmq_admin_password | default(omit) }}"
         vhost: "{{ rabbitmq_vhost_name }}"
         name: "{{ item.name }}"
         state: "{{ item.state | default(queue_default.state) }}"
         auto_delete: "{{ item.auto_delete | default(omit) }}"
-        auto_expires: "{{ item.auto_expires | default(queue_default.auto_expires) }}"
-        dead_letter_exchange: "{{ item.dead_letter_exchange
-                                | default(queue_default.dead_letter_exchange) }}"
-        dead_letter_routing_key: "{{ item.dead_letter_routing_key
-                                   | default(queue_default.dead_letter_routing_key) }}"
-        durable: "{{ item.durable | default(queue_default.durable) }}"
-        max_length: "{{ item.max_length | default(queue_default.max_length) }}"
-        message_ttl: "{{ item.message_ttl | default(queue_default.message_ttl) }}"
+        auto_expires: "{{ item.auto_expires | default(omit) }}"
+        dead_letter_exchange: "{{ item.dead_letter_exchange | default(omit) }}"
+        dead_letter_routing_key: "{{ item.dead_letter_routing_key | default(omit) }}"
+        durable: "{{ item.durable | default(omit) }}"
+        max_length: "{{ item.max_length | default(omit) }}"
+        message_ttl: "{{ item.message_ttl | default(omit) }}"
         arguments: "{{ item.arguments | default(omit) }}"
+      no_log: true
       with_items: "{{ rabbitmq_vhost_queues }}"
       loop_control:
         label: "{{ item.name }}"
 
-    - when: item.state == "present"
+    - when: item.state|default(queue_default.state) == "present"
       include_tasks: bind.yml
       vars:
         destination: "{{ item.name }}"
         destination_type: queue
-        bindings: "{{ item.bindings }}"
+        bindings: "{{ item.bindings | default(queue_default.bindings) }}"
       with_items: "{{ rabbitmq_vhost_queues }}"
       loop_control:
         label: "{{ item.name }}"

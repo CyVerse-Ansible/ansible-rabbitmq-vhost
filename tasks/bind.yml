@@ -10,18 +10,18 @@
 # destination_type: required
 
 - name: bind | bind {{ destination_type }} {{ destination }}
-  no_log: true
   rabbitmq_binding:
-    login_port: "{{ rabbitmq_mgmt_port }}"
-    login_user: "{{ rabbitmq_admin_user }}"
+    login_port: "{{ rabbitmq_mgmt_port | default(omit) }}"
+    login_user: "{{ rabbitmq_admin_user | default(omit) }}"
     login_password: "{{ rabbitmq_admin_password | default(omit) }}"
     vhost: "{{ rabbitmq_vhost_name }}"
     destination: "{{ destination }}"
     destination_type: "{{ destination_type }}"
     name: "{{ item.source }}"
-    state: "{{ item.state | default(binding_default.state) }}"
-    routing_key: "{{ item.routing_key | default(binding_default.routing_key) }}"
+    state: "{{ item.state | default(omit) }}"
+    routing_key: "{{ item.routing_key | default(omit) }}"
     arguments: "{{ item.arguments | default(omit) }}"
+  no_log: true
   with_items: "{{ bindings }}"
   loop_control:
     label: "{{ item.source }}->{{ destination }}"

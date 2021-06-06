@@ -14,10 +14,10 @@
       rabbitmq_user:
         user: admin
         password: password
+        tags: administrator,monitoring
         configure_priv: .*
         read_priv: .*
         write_priv: .*
-        tags: administrator,monitoring
 
     - name: create user user
       rabbitmq_user:
