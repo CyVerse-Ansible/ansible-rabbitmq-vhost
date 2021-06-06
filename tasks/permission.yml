@@ -2,10 +2,10 @@
 # EXPECTED VARS:
 #
 # user:
-#   name:           required
-#   configure_priv: optional
-#   read_priv:      optional
-#   write_priv:     optional
+#   name:            required
+#   configure_priv:  optional
+#   read_priv:       optional
+#   write_priv:      optional
 
 - name: permission | retrieve tags for {{ user.name }}
   shell: |

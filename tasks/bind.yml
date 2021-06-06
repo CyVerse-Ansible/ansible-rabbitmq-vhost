@@ -1,13 +1,15 @@
 ---
 # EXPECTED VARS:
 #
-# bindings:
-#   - arguments:    optional
-#   - routing_key:  optional
-#   - source:       required
-#   - state:        optional
-# destination:      required
-# destination_type: required
+# destination:       required
+# destination_type:  required
+# bindings:          required a list with zero or more binding objects
+#
+# A binding object is expected to have the following fields.
+# source:       required
+# arguments:    optional
+# routing_key:  optional
+# state:        optional
 
 - name: bind | bind {{ destination_type }} {{ destination }}
   rabbitmq_binding:
