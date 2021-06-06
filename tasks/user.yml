@@ -16,7 +16,6 @@
   changed_when: false
 
 - name: user | configure user {{ user.name }}
-  no_log: true
   rabbitmq_user:
     node: "{{ rabbitmq_node | default(omit) }}"
     vhost: "{{ rabbitmq_vhost_name }}"
