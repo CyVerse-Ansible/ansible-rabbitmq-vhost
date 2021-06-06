@@ -7,18 +7,18 @@
   tasks:
     - name: verify user user has correct permissions
       shell: |
-        rabbitmqctl list_permissions -p /vhost \
+        rabbitmqctl list_permissions -p /vhost1 \
           | grep -q -e '^user[[:space:]]*\^\$[[:space:]]*\^\$[[:space:]]*\^\$$'
       changed_when: false
 
-    - name: verify the vhost /vhost created
+    - name: verify the vhost /vhost2 created
       shell: |
-        rabbitmqctl list_vhosts | grep -q -e '^/vhost$'
+        rabbitmqctl list_vhosts | grep -q -e '^/vhost2$'
       changed_when: false
 
     - name: verify user admin has correct permissions
       shell: |
-        rabbitmqctl list_permissions -p /vhost \
+        rabbitmqctl list_permissions -p /vhost2 \
           | grep -q -e '^admin[[:space:]]*\.\*[[:space:]]*\.\*[[:space:]]*\.\*$'
       changed_when: false
 
