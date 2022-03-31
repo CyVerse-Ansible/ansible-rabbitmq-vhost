@@ -1,0 +1,17 @@
+---
+name: Publish
+on:
+  workflow_run:
+    workflows: [ Test ]
+    branches: [ master ]
+    types: [ completed ]
+jobs:
+  on-success:
+    runs-on: ubuntu-latest
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    steps:
+      - uses: actions/checkout@v2
+      
+      - uses: robertdebock/galaxy-action@1.1.0
+        with: 
+          galaxy_api_key: ${{ secrets.CYVERSE_GALAXY_KEY }}

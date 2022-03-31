@@ -1,16 +1,16 @@
-Role Name
-=========
+# cyverse-ansible.rabbitmq-vhost
+
 [![Ansible Galaxy](https://img.shields.io/badge/role-cyverse--ansible.rabbitmq--vhost-blue.svg)](https://galaxy.ansible.com/cyverse-ansible/rabbitmq-vhost/)
+[![Test Status](https://github.com/CyVerse-Ansible/ansible-rabbitmq-vhost/actions/workflows/test.yml/badge.svg)](https://github.com/CyVerse-Ansible/ansible-rabbitmq-vhost/actions/workflows/test.yml)
 
 This is a role for configuring a vhost on a RabbitMQ broker.
 
-Requirements
-------------
+## Requirements
 
-The managed nodes must have RabbitMQ server installed with the management plugin. The RabbitMQ server should be at least version 3.2.
+The managed nodes must have RabbitMQ server installed with the management plugin. The RabbitMQ 
+server should be at least version 3.2.
 
-Role Variables
---------------
+## Role Variables
 
 Variable                    | Required | Default   | Choices         | Comments
 --------------------------- | -------- | --------- | --------------- | --------
@@ -26,7 +26,6 @@ Variable                    | Required | Default   | Choices         | Comments
 `rabbitmq_vhost_state`      | no       | present   | absent, present | whether the vhost should be present on the server
 `rabbitmq_vhost_tracing`    | no       | false     |                 | whether to enable tracing for this vhost (UNTESTED)
 `rabbitmq_vhost_users`      | no       | []        |                 | the users to add, modify, or remove from the vhost
-
 
 `irods_vhost_parameters` item
 
@@ -96,15 +95,14 @@ Field         | Required | Default | Choices         | Comment
 `source`      | yes      |         |                 | the source for the binding
 `state`       | no       | present | absent, present | whether or not this binding should be present
 
-Dependencies
-------------
+## Dependencies
 
 * requests >= 1.0.0
 
-Example Playbook
-----------------
+## Example Playbook
 
-Here's an example playbook that configures a vhost `/prod/data-store` with three users, an exchange, and two queues. The exchange has two queues bound to it.
+Here's an example playbook that configures a vhost `/prod/data-store` with three users, an exchange, 
+and two queues. The exchange has two queues bound to it.
 
 ```yaml
 - hosts: amqp_brokers
@@ -137,13 +135,11 @@ Here's an example playbook that configures a vhost `/prod/data-store` with three
               routing_key: data-object.add
 ```
 
-License
--------
+## License
 
 See [license](/LICENSE.txt).
 
-Author Information
-------------------
+## Author Information
 
 Tony Edgin  
 <tedgin@cyverse.org>  
