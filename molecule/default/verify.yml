@@ -7,28 +7,33 @@
   tasks:
     - name: verify user user has correct permissions
       shell: |
-        rabbitmqctl list_permissions -p /vhost1 \
+        set -o pipefail
+        rabbitmqctl list_permissions --vhost /vhost1 \
           | grep -q -e '^user[[:space:]]\+\^\$[[:space:]]\+\^\$[[:space:]]\+\^\$$'
       changed_when: false
 
     - name: verify the vhost /vhost2 created
       shell: |
+        set -o pipefail
         rabbitmqctl list_vhosts | grep -q -e '^/vhost2$'
       changed_when: false
 
     - name: verify user admin has correct permissions
       shell: |
-        rabbitmqctl list_permissions -p /vhost2 \
+        set -o pipefail
+        rabbitmqctl list_permissions --vhost /vhost2 \
           | grep -q -e '^admin[[:space:]]\+\.\*[[:space:]]\+\.\*[[:space:]]\+\.\*$'
       changed_when: false
 
     - name: verify tags are unchanged
       shell: |
+        set -o pipefail
         rabbitmqctl list_users \
           | grep -q -e '^admin[[:space:]]\+\[administrator,[[:space:]]*monitoring\]$'
       changed_when: false
 
     - name: verify topic-exchange exchange was created
       shell: |
-        rabbitmqctl list_exchanges -p /vhost2 | grep -q -e '^topic-exchange[[:space:]]\+topic$'
+        set -o pipefail
+        rabbitmqctl list_exchanges --vhost /vhost2 | grep -q -e '^topic-exchange[[:space:]]\+topic$'
       changed_when: false
