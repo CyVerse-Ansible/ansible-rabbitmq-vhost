@@ -12,5 +12,4 @@ provisioner:
   name: ansible
 verifier:
   name: ansible
-lint: |
-  bash -c 'yamllint . && ansible-lint .'
+lint: bash -c 'yamllint . && ansible-lint .'

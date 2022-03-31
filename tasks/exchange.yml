@@ -24,7 +24,6 @@
     exchange_type: "{{ exchange.type | default(omit) }}"
     internal: "{{ exchange.internal | default(omit) }}"
     arguments: "{{ exchange.arguments | default(omit) }}"
-  no_log: true
 
 - when: exchange.state|default(exchange_default.state) == "present"
   include_tasks: bind.yml
