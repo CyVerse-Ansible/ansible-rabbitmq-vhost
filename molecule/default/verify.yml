@@ -5,6 +5,13 @@
   collections:
     - ansible.builtin
   tasks:
+    - name: verify tags are unchanged
+      shell: |
+        set -o pipefail
+        rabbitmqctl list_users \
+          | grep -q -e '^admin[[:space:]]\+\[administrator,[[:space:]]*monitoring\]$'
+      changed_when: false
+
     - name: verify user user has correct permissions
       shell: |
         set -o pipefail
@@ -23,13 +30,6 @@
         set -o pipefail
         rabbitmqctl list_permissions --vhost /vhost2 \
           | grep -q -e '^admin[[:space:]]\+\.\*[[:space:]]\+\.\*[[:space:]]\+\.\*$'
-      changed_when: false
-
-    - name: verify tags are unchanged
-      shell: |
-        set -o pipefail
-        rabbitmqctl list_users \
-          | grep -q -e '^admin[[:space:]]\+\[administrator,[[:space:]]*monitoring\]$'
       changed_when: false
 
     - name: verify topic-exchange exchange was created
