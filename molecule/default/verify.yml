@@ -33,6 +33,12 @@
           exit 1
         fi
         echo "$users" | grep -q -e '^admin[[:space:]]\+\[administrator,[[:space:]]*monitoring\]$'
+      # XXX: The following causes the shell to fail with exit code 70 and 
+      #      ':terminated' written to stderr when the task is run in the 
+      #      gofrolist/molecule github action. It works when run locally in 
+      #      molecule.
+      # rabbitmqctl list_users \
+      #   | grep -q -e '^admin[[:space:]]\+\[administrator,[[:space:]]*monitoring\]$'
       changed_when: false
 
     - name: verify topic-exchange exchange was created
