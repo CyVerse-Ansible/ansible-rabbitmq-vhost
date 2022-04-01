@@ -28,8 +28,11 @@
     - name: verify tags are unchanged
       shell: |
         set -o pipefail 
-        rabbitmqctl list_users \
-          | grep -q -e '^admin[[:space:]]\+\[administrator,[[:space:]]*monitoring\]$'
+        if ! users="$(rabbitmqctl list_users)"; then
+          printf 'rabbitmqclt list_users failed\n' >&2
+          exit 1
+        fi
+        echo "$users" | grep -q -e '^admin[[:space:]]\+\[administrator,[[:space:]]*monitoring\]$'
       changed_when: false
 
     - name: verify topic-exchange exchange was created
