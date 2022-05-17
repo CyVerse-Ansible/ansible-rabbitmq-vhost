@@ -1,6 +1,6 @@
-# cyverse-ansible.rabbitmq-vhost
+# cyverse-ansible.rabbitmq_vhost
 
-[![Ansible Galaxy](https://img.shields.io/badge/role-cyverse--ansible.rabbitmq--vhost-blue.svg)](https://galaxy.ansible.com/cyverse-ansible/rabbitmq-vhost/)
+[![Ansible Galaxy](https://img.shields.io/badge/role-cyverse--ansible.rabbitmq_vhost-blue.svg)](https://galaxy.ansible.com/cyverse-ansible/rabbitmq_vhost/)
 [![Test Status](https://github.com/CyVerse-Ansible/ansible-rabbitmq-vhost/actions/workflows/test.yml/badge.svg)](https://github.com/CyVerse-Ansible/ansible-rabbitmq-vhost/actions/workflows/test.yml)
 
 This is a role for configuring a vhost on a RabbitMQ broker.
