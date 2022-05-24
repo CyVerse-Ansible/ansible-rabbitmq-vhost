@@ -6,7 +6,8 @@
     state: "{{ rabbitmq_vhost_state }}"
     tracing: "{{ rabbitmq_vhost_tracing | default(omit) }}"
 
-- when: rabbitmq_vhost_state == "present"
+- name: main | configure vhost
+  when: rabbitmq_vhost_state == "present"
   block:
     - name: main | configure parameters
       community.rabbitmq.rabbitmq_parameter:
