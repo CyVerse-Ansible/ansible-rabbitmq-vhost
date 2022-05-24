@@ -32,7 +32,7 @@
     arguments: "{{ queue.arguments | default(omit) }}"
   no_log: true
 
-- name: queue | bing
+- name: queue | bind
   when: queue.state|default(queue_default.state) == "present"
   include_tasks: bind.yml
   vars:
