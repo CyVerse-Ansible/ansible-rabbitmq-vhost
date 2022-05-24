@@ -1,6 +1,6 @@
 ---
 - name: main | Create or remove vhost
-  rabbitmq_vhost:
+  community.rabbitmq.rabbitmq_vhost:
     node: "{{ rabbitmq_node | default(omit) }}"
     name: "{{ rabbitmq_vhost_name }}"
     state: "{{ rabbitmq_vhost_state }}"
@@ -9,7 +9,7 @@
 - when: rabbitmq_vhost_state == "present"
   block:
     - name: main | configure parameters
-      rabbitmq_parameter:
+      community.rabbitmq.rabbitmq_parameter:
         node: "{{ rabbitmq_node | default(omit) }}"
         vhost: "{{ rabbitmq_vhost_name }}"
         component: "{{ item.component }}"
@@ -21,7 +21,7 @@
         label: "{{ item.name }}"
 
     - name: main | configure policies
-      rabbitmq_policy:
+      community.rabbitmq.rabbitmq_policy:
         node: "{{ rabbitmq_node | default(omit) }}"
         vhost: "{{ rabbitmq_vhost_name }}"
         name: "{{ item.name }}"
@@ -42,19 +42,22 @@
       loop_control:
         label: "{{ item.name }}"
 
-    - include_tasks: permission.yml
+    - name: main | permissions
+      include_tasks: permission.yml
       with_items: "{{ rabbitmq_vhost_users }}"
       loop_control:
         loop_var: user
         label: "{{ user.name }}"
 
-    - include_tasks: exchange.yml
+    - name: main | exchanges
+      include_tasks: exchange.yml
       with_items: "{{ rabbitmq_vhost_exchanges }}"
       loop_control:
         loop_var: exchange
         label: "{{ exchange.name }}"
 
-    - include_tasks: queue.yml
+    - name: main | queues
+      include_tasks: queue.yml
       with_items: "{{ rabbitmq_vhost_queues }}"
       loop_control:
         loop_var: queue

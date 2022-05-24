@@ -12,7 +12,7 @@
 # state:        optional
 
 - name: bind | bind {{ destination_type }} {{ destination }}
-  rabbitmq_binding:
+  community.rabbitmq.rabbitmq_binding:
     login_port: "{{ rabbitmq_mgmt_port | default(omit) }}"
     login_user: "{{ rabbitmq_admin_user | default(omit) }}"
     login_password: "{{ rabbitmq_admin_password | default(omit) }}"

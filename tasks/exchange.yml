@@ -12,7 +12,7 @@
 #   type:         optional
 
 - name: exchange | configure exchange {{ exchange.name }}
-  rabbitmq_exchange:
+  community.rabbitmq.rabbitmq_exchange:
     login_port: "{{ rabbitmq_mgmt_port | default(omit) }}"
     login_user: "{{ rabbitmq_admin_user | default(omit) }}"
     login_password: "{{ rabbitmq_admin_password | default(omit) }}"
@@ -25,7 +25,8 @@
     internal: "{{ exchange.internal | default(omit) }}"
     arguments: "{{ exchange.arguments | default(omit) }}"
 
-- when: exchange.state|default(exchange_default.state) == "present"
+- name: exchange | bind
+  when: exchange.state|default(exchange_default.state) == "present"
   include_tasks: bind.yml
   vars:
     bindings: "{{ exchange.bindings | default(exchange_default.bindings) }}"

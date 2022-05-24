@@ -8,7 +8,7 @@
 #   write_priv:      optional
 
 - name: permission | retrieve tags for {{ user.name }}
-  shell: |
+  ansible.builtin.shell: |
     set -o pipefail
     rabbitmqctl {{ '-n ' ~ rabbitmq_node if rabbitmq_node is defined }} list_users \
       | sed -n 's/^{{ user.name }}[[:space:]]*\[\(.*\)\]$/\1/p'
@@ -16,7 +16,7 @@
   changed_when: false
 
 - name: permission | configure permissions for {{ user.name }}
-  rabbitmq_user:
+  community.rabbitmq.rabbitmq_user:
     node: "{{ rabbitmq_node | default(omit) }}"
     user: "{{ user.name }}"
     tags: "{{ tag_resp.stdout }}"

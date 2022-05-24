@@ -15,7 +15,7 @@
 #   state:                    optional
 
 - name: queue | configure {{ queue.name }}
-  rabbitmq_queue:
+  community.rabbitmq.rabbitmq_queue:
     login_port: "{{ rabbitmq_mgmt_port | default(omit) }}"
     login_user: "{{ rabbitmq_admin_user | default(omit) }}"
     login_password: "{{ rabbitmq_admin_password | default(omit) }}"
@@ -32,7 +32,8 @@
     arguments: "{{ queue.arguments | default(omit) }}"
   no_log: true
 
-- when: queue.state|default(queue_default.state) == "present"
+- name: queue | bing
+  when: queue.state|default(queue_default.state) == "present"
   include_tasks: bind.yml
   vars:
     destination: "{{ queue.name }}"
