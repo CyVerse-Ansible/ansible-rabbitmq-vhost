@@ -5,11 +5,10 @@ jobs:
   molecule:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - name: checkout
+        uses: actions/checkout@v2
         with: 
           path: "${{ github.repository }}"
  
-      - uses: gofrolist/molecule-action@v2.2.21
-        with:
-          molecule_command: test
-          molecule_args: --all
+      - name: molecule
+        uses: robertdebock/molecule-action@4.0.8
