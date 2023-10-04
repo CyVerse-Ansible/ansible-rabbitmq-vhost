@@ -11,4 +11,4 @@ jobs:
           path: "${{ github.repository }}"
 
       - name: molecule
-        uses: robertdebock/molecule-action@5.0.3
+        uses: robertdebock/molecule-action@6.0.0
