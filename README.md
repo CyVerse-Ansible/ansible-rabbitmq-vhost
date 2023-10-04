@@ -7,25 +7,25 @@ This is a role for configuring a vhost on a RabbitMQ broker.
 
 ## Requirements
 
-The managed nodes must have RabbitMQ server installed with the management plugin. The RabbitMQ 
+The managed nodes must have RabbitMQ server installed with the management plugin. The RabbitMQ
 server should be at least version 3.2.
 
 ## Role Variables
 
-Variable                    | Required | Default   | Choices         | Comments
---------------------------- | -------- | --------- | --------------- | --------
-`rabbitmq_admin_password`   | no       |           |                 | the password used to authenticate `rabbitmq_admin_user`
-`rabbitmq_admin_user`       | no       | guest     |                 | a user able to administer the vhost (doesn't need to have permission on it as long as `rabbitmq_vhost_users` list provides it)
-`rabbitmq_mgmt_port`        | no       | 15672     |                 | the port used to connect to the management plugin (UNTESTED)
-`rabbimtq_node`             | no       | rabbit    |                 | the erlang node of the rabbitmq server to configure
-`rabbitmq_vhost_exchanges`  | no       | []        |                 | the exchanges to add, modify, or remove from the vhost
-`rabbitmq_vhost_name`       | yes      |           |                 | the name of the vhost to manage
-`rabbitmq_vhost_parameters` | no       | []        |                 | the parameters to add, modify, or remove from the vhost (UNTESTED)
-`rabbitmq_vhost_policies`   | no       | []        |                 | the policies to add or remove from the vhost (UNTESTED)
-`rabbitmq_vhost_queues`     | no       | []        |                 | the queues to add, modify, or remove from the vhost (UNTESTED)
-`rabbitmq_vhost_state`      | no       | present   | absent, present | whether the vhost should be present on the server
-`rabbitmq_vhost_tracing`    | no       | false     |                 | whether to enable tracing for this vhost (UNTESTED)
-`rabbitmq_vhost_users`      | no       | []        |                 | the users to add, modify, or remove from the vhost
+Variable                         | Required | Default   | Choices         | Comments
+-------------------------------- | -------- | --------- | --------------- | --------
+`rabbitmq_vhost_admin_password`  | no       |           |                 | the password used to authenticate `rabbitmq_vhost_admin_user`
+`rabbitmq_vhost_admin_user`      | no       | guest     |                 | a user able to administer the vhost (doesn't need to have permission on it as long as `rabbitmq_vhost_users` list provides it)
+`rabbitmq_vhpst_mgmt_port`       | no       | 15672     |                 | the port used to connect to the management plugin (UNTESTED)
+`rabbitmg_vhost_node`            | no       | rabbit    |                 | the erlang node of the rabbitmq server to configure
+`rabbitmq_vhost_exchanges`       | no       | []        |                 | the exchanges to add, modify, or remove from the vhost
+`rabbitmq_vhost_name`            | yes      |           |                 | the name of the vhost to manage
+`rabbitmq_vhost_parameters`      | no       | []        |                 | the parameters to add, modify, or remove from the vhost (UNTESTED)
+`rabbitmq_vhost_policies`        | no       | []        |                 | the policies to add or remove from the vhost (UNTESTED)
+`rabbitmq_vhost_queues`          | no       | []        |                 | the queues to add, modify, or remove from the vhost (UNTESTED)
+`rabbitmq_vhost_state`           | no       | present   | absent, present | whether the vhost should be present on the server
+`rabbitmq_vhost_tracing`         | no       | false     |                 | whether to enable tracing for this vhost (UNTESTED)
+`rabbitmq_vhost_users`           | no       | []        |                 | the users to add, modify, or remove from the vhost
 
 `irods_vhost_parameters` item
 
@@ -55,7 +55,6 @@ Field            | Required | Default | Choices         | Comment
 `name`           | yes      |         |                 | the name of the user
 `read_priv`      | no       | ^$      |                 | regular expression used to restrict the user's read ability
 `write_priv`     | no       | ^$      |                 | regular expression used to restrict the user's write ability
-
 
 `irods_vhost_exchanges` item
 
@@ -101,14 +100,14 @@ Field         | Required | Default | Choices         | Comment
 
 ## Example Playbook
 
-Here's an example playbook that configures a vhost `/prod/data-store` with three users, an exchange, 
+Here's an example playbook that configures a vhost `/prod/data-store` with three users, an exchange,
 and two queues. The exchange has two queues bound to it.
 
 ```yaml
 - hosts: amqp_brokers
   roles:
     - role: cyverse-ansible.rabbitmq_vhost
-      rabbitmq_admin_user: admin
+      rabbitmq_vhost_admin_user: admin
       rabbitmq_vhost_name: /prod/data-store
       rabbitmq_vhost_users:
         - name: admin
@@ -141,6 +140,6 @@ See [license](/LICENSE.txt).
 
 ## Author Information
 
-Tony Edgin  
-<tedgin@cyverse.org>  
+Tony Edgin
+<tedgin@cyverse.org>
 [CyVerse](https://cyverse.org)

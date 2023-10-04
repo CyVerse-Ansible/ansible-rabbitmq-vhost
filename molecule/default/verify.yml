@@ -2,47 +2,45 @@
 - name: Verify
   hosts: all
   gather_facts: false
-  collections:
-    - ansible.builtin
   tasks:
-    - name: verify user user has correct permissions
-      shell: |
+    - name: Verify user user has correct permissions
+      ansible.builtin.shell: |
         set -o pipefail
         rabbitmqctl list_permissions --vhost /vhost1 \
           | grep -q -e '^user[[:space:]]\+\^\$[[:space:]]\+\^\$[[:space:]]\+\^\$$'
       changed_when: false
 
-    - name: verify the vhost /vhost2 created
-      shell: |
+    - name: Verify the vhost /vhost2 created
+      ansible.builtin.shell: |
         set -o pipefail
         rabbitmqctl list_vhosts | grep -q -e '^/vhost2$'
       changed_when: false
 
-    - name: verify user admin has correct permissions
-      shell: |
+    - name: Verify user admin has correct permissions
+      ansible.builtin.shell: |
         set -o pipefail
         rabbitmqctl list_permissions --vhost /vhost2 \
           | grep -q -e '^admin[[:space:]]\+\.\*[[:space:]]\+\.\*[[:space:]]\+\.\*$'
       changed_when: false
 
-    - name: verify tags are unchanged
-      shell: |
-        set -o pipefail 
+    - name: Verify tags are unchanged
+      ansible.builtin.shell: |
+        set -o pipefail
         if ! users="$(rabbitmqctl list_users)"; then
           printf 'rabbitmqclt list_users failed\n' >&2
           exit 1
         fi
         echo "$users" | grep -q -e '^admin[[:space:]]\+\[administrator,[[:space:]]*monitoring\]$'
-      # XXX: The following causes the shell to fail with exit code 70 and 
-      #      ':terminated' written to stderr when the task is run in the 
-      #      gofrolist/molecule github action. It works when run locally in 
+      # XXX: The following causes the shell to fail with exit code 70 and
+      #      ':terminated' written to stderr when the task is run in the
+      #      gofrolist/molecule github action. It works when run locally in
       #      molecule.
       # rabbitmqctl list_users \
       #   | grep -q -e '^admin[[:space:]]\+\[administrator,[[:space:]]*monitoring\]$'
       changed_when: false
 
-    - name: verify topic-exchange exchange was created
-      shell: |
+    - name: Verify topic-exchange exchange was created
+      ansible.builtin.shell: |
         set -o pipefail
         rabbitmqctl list_exchanges --vhost /vhost2 | grep -q -e '^topic-exchange[[:space:]]\+topic$'
       changed_when: false

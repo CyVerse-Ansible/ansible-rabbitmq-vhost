@@ -1,25 +1,23 @@
 ---
 - name: Converge
   hosts: all
-  collections:
-    - ansible.builtin
   tasks:
-    - name: create minimal user
-      include_role:
-        name: ansible-rabbitmq-vhost
+    - name: Create minimal user
+      ansible.builtin.include_role:
+        name: cyverse.rabbitmq_vhost
       vars:
-        rabbitmq_admin_user: admin
-        rabbitmq_admin_password: password
+        rabbitmq_vhost_admin_user: admin
+        rabbitmq_vhost_admin_password: password
         rabbitmq_vhost_name: /vhost1
         rabbitmq_vhost_users:
           - name: user
 
-    - name: create vhost
-      include_role:
-        name: ansible-rabbitmq-vhost
+    - name: Create vhost
+      ansible.builtin.include_role:
+        name: cyverse.rabbitmq_vhost
       vars:
-        rabbitmq_admin_user: admin
-        rabbitmq_admin_password: password
+        rabbitmq_vhost_admin_user: admin
+        rabbitmq_vhost_admin_password: password
         rabbitmq_vhost_name: /vhost2
         rabbitmq_vhost_users:
           - name: admin
