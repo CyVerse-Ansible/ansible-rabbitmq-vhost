@@ -6,9 +6,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: checkout
-        uses: actions/checkout@v2
-        with: 
+        uses: actions/checkout@v4
+        with:
           path: "${{ github.repository }}"
- 
+
       - name: molecule
         uses: robertdebock/molecule-action@4.0.8
