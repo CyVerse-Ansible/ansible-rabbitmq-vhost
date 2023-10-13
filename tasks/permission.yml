@@ -8,10 +8,12 @@
 #   write_priv:      optional
 
 - name: Permission | retrieve tags for {{ user.name }}
-  ansible.builtin.shell: |
-    set -o pipefail
-    rabbitmqctl {{ '-n ' ~ rabbitmq_vhost_node if rabbitmq_vhost_node is defined }} list_users \
-      | sed -n 's/^{{ user.name }}[[:space:]]*\[\(.*\)\]$/\1/p'
+  ansible.builtin.shell:
+    executable: /bin/bash
+    cmd: |
+      set -o pipefail
+      rabbitmqctl {{ '-n ' ~ rabbitmq_vhost_node if rabbitmq_vhost_node is defined }} list_users \
+        | sed -n 's/^{{ user.name }}[[:space:]]*\[\(.*\)\]$/\1/p'
   register: tag_resp
   changed_when: false
 
