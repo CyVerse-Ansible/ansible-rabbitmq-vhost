@@ -1,17 +1,14 @@
 ---
 - name: Prepare
   hosts: all
-  collections:
-    - ansible.builtin
-    - community.rabbitmq
   tasks:
-    - name: install requests library
-      package:
+    - name: Install requests library
+      ansible.builtin.package:
         name: py3-requests
         state: present
 
-    - name: create user admin
-      rabbitmq_user:
+    - name: Create user admin
+      community.rabbitmq.rabbitmq_user:
         user: admin
         password: password
         tags: administrator,monitoring
@@ -19,6 +16,6 @@
         read_priv: .*
         write_priv: .*
 
-    - name: create user user
-      rabbitmq_user:
+    - name: Create user user
+      community.rabbitmq.rabbitmq_user:
         name: user

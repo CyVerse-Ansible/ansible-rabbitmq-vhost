@@ -14,28 +14,28 @@
 #   message_ttl:              optional
 #   state:                    optional
 
-- name: queue | configure {{ queue.name }}
+- name: Queue | configure {{ queue.name }}
   community.rabbitmq.rabbitmq_queue:
-    login_port: "{{ rabbitmq_mgmt_port | default(omit) }}"
-    login_user: "{{ rabbitmq_admin_user | default(omit) }}"
-    login_password: "{{ rabbitmq_admin_password | default(omit) }}"
+    login_port: "{{ rabbitmq_vhost_mgmt_port | d(omit) }}"
+    login_user: "{{ rabbitmq_vhost_admin_user | d(omit) }}"
+    login_password: "{{ rabbitmq_vhost_admin_password | d(omit) }}"
     vhost: "{{ rabbitmq_vhost_name }}"
     name: "{{ queue.name }}"
-    state: "{{ queue.state | default(queue_default.state) }}"
-    auto_delete: "{{ queue.auto_delete | default(omit) }}"
-    auto_expires: "{{ queue.auto_expires | default(omit) }}"
-    dead_letter_exchange: "{{ queue.dead_letter_exchange | default(omit) }}"
-    dead_letter_routing_key: "{{ queue.dead_letter_routing_key | default(omit) }}"
-    durable: "{{ queue.durable | default(omit) }}"
-    max_length: "{{ queue.max_length | default(omit) }}"
-    message_ttl: "{{ queue.message_ttl | default(omit) }}"
-    arguments: "{{ queue.arguments | default(omit) }}"
+    state: "{{ queue.state | d(queue_default.state) }}"
+    auto_delete: "{{ queue.auto_delete | d(omit) }}"
+    auto_expires: "{{ queue.auto_expires | d(omit) }}"
+    dead_letter_exchange: "{{ queue.dead_letter_exchange | d(omit) }}"
+    dead_letter_routing_key: "{{ queue.dead_letter_routing_key | d(omit) }}"
+    durable: "{{ queue.durable | d(omit) }}"
+    max_length: "{{ queue.max_length | d(omit) }}"
+    message_ttl: "{{ queue.message_ttl | d(omit) }}"
+    arguments: "{{ queue.arguments | d(omit) }}"
   no_log: true
 
-- name: queue | bind
-  when: queue.state|default(queue_default.state) == "present"
-  include_tasks: bind.yml
+- name: Queue | bind
+  when: queue.state|d(queue_default.state) == "present"
+  ansible.builtin.include_tasks: bind.yml
   vars:
     destination: "{{ queue.name }}"
     destination_type: queue
-    bindings: "{{ queue.bindings | default(queue_default.bindings) }}"
+    bindings: "{{ queue.bindings | d(queue_default.bindings) }}"

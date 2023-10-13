@@ -11,24 +11,24 @@
 #   state:        optional
 #   type:         optional
 
-- name: exchange | configure exchange {{ exchange.name }}
+- name: Exchange | configure exchange {{ exchange.name }}
   community.rabbitmq.rabbitmq_exchange:
-    login_port: "{{ rabbitmq_mgmt_port | default(omit) }}"
-    login_user: "{{ rabbitmq_admin_user | default(omit) }}"
-    login_password: "{{ rabbitmq_admin_password | default(omit) }}"
+    login_port: "{{ rabbitmq_vhost_mgmt_port | d(omit) }}"
+    login_user: "{{ rabbitmq_vhost_admin_user | d(omit) }}"
+    login_password: "{{ rabbitmq_vhost_admin_password | d(omit) }}"
     vhost: "{{ rabbitmq_vhost_name }}"
     name: "{{ exchange.name }}"
-    state: "{{ exchange.state | default(exchange_default.state) }}"
-    auto_delete: "{{ exchange.auto_delete | default(omit) }}"
-    durable: "{{ exchange.durable | default(omit) }}"
-    exchange_type: "{{ exchange.type | default(omit) }}"
-    internal: "{{ exchange.internal | default(omit) }}"
-    arguments: "{{ exchange.arguments | default(omit) }}"
+    state: "{{ exchange.state | d(exchange_default.state) }}"
+    auto_delete: "{{ exchange.auto_delete | d(omit) }}"
+    durable: "{{ exchange.durable | d(omit) }}"
+    exchange_type: "{{ exchange.type | d(omit) }}"
+    internal: "{{ exchange.internal | d(omit) }}"
+    arguments: "{{ exchange.arguments | d(omit) }}"
 
-- name: exchange | bind
-  when: exchange.state|default(exchange_default.state) == "present"
-  include_tasks: bind.yml
+- name: Exchange | bind
+  when: exchange.state|d(exchange_default.state) == "present"
+  ansible.builtin.include_tasks: bind.yml
   vars:
-    bindings: "{{ exchange.bindings | default(exchange_default.bindings) }}"
+    bindings: "{{ exchange.bindings | d(exchange_default.bindings) }}"
     destination: "{{ exchange.name }}"
     destination_type: exchange
