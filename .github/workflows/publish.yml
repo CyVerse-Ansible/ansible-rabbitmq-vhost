@@ -3,7 +3,7 @@ name: Publish
 on:
   workflow_run:
     workflows: [ Test ]
-    branches: [ master ]
+    branches: [ main ]
     types: [ completed ]
 jobs:
   on-success:
@@ -11,7 +11,7 @@ jobs:
     if: ${{ github.event.workflow_run.conclusion == 'success' }}
     steps:
       - uses: actions/checkout@v2
-      
+
       - uses: robertdebock/galaxy-action@1.2.0
-        with: 
+        with:
           galaxy_api_key: ${{ secrets.CYVERSE_GALAXY_KEY }}
