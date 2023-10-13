@@ -10,8 +10,10 @@ jobs:
     runs-on: ubuntu-latest
     if: ${{ github.event.workflow_run.conclusion == 'success' }}
     steps:
-      - uses: actions/checkout@v2
+      - name: checkout
+        uses: actions/checkout@v4
 
-      - uses: robertdebock/galaxy-action@1.2.0
+      - name: galaxy
+        uses: robertdebock/galaxy-action@1.2.0
         with:
           galaxy_api_key: ${{ secrets.CYVERSE_GALAXY_KEY }}
