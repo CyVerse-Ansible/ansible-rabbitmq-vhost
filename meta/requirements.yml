@@ -1,5 +1,5 @@
 ---
-roles: []
+dependencies: []
 
 collections:
   - name: community.rabbitmq
