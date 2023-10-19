@@ -1,6 +1,6 @@
 galaxy_info:
   role_name: rabbitmq_vhost
-  namespace: cyverse_ansible
+  namespace: CyVerse-Ansible
   description: An ansible role for managing a RabbitMQ vhost
   company: University of Arizona
   author: Tony Edgin
