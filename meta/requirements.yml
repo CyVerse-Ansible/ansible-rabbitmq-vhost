@@ -1,6 +1,6 @@
 ---
+roles: []
+
 collections:
   - name: community.rabbitmq
     version: ">=1.2.3"
-
-roles: []
