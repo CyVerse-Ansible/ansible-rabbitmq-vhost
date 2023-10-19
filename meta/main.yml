@@ -2,7 +2,7 @@ galaxy_info:
   role_name: rabbitmq_vhost
   namespace: cyverse
   description: An ansible role for managing a RabbitMQ vhost
-  company: CyVerse
+  company: University of Arizona
   author: Tony Edgin
   license: See LICENSE.txt
   min_ansible_version: 2.11.1
@@ -10,17 +10,12 @@ galaxy_info:
   platforms:
     - name: Ubuntu
       versions:
-        - jammy
+        - all
     - name: EL
       versions:
-        - "7"
+        - all
 
   galaxy_tags:
     - cyverse
     - rabbitmq
     - configuration
-
-dependencies: []
-
-collections:
-  - community.rabbitmq
